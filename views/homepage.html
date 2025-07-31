@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WatchStore | Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b, #374151);
+  color: #f8fafc;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  background: linear-gradient(135deg, #1e3a8a, #3730a3, #581c87);
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+}
+
+.navbar a {
+  color: white !important;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #06b6d4 !important;
+}
+
+.hero {
+  background: url('https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg') no-repeat center center/cover;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  color: #f8fafc;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.3);
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  font-family: 'Great Vibes', cursive;
+  color: #f8fafc;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  color: #cbd5e1;
+}
+
+.btn-shop {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: white;
+  border-radius: 30px;
+  padding: 12px 28px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+}
+
+.btn-shop:hover {
+  background: linear-gradient(135deg, #047857, #059669);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.5);
+}
+
+h2.section-heading {
+  font-weight: 700;
+  font-size: 2rem;
+  color: #f8fafc;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.col-md-4 {
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+  padding: 0 15px;
+  margin-bottom: 30px;
+}
+
+.watch-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1f2937, #374151);
+  color: #f8fafc;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+  border: 1px solid #4b5563;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.watch-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(6, 182, 212, 0.2);
+  border-color: #06b6d4;
+}
+
+.watch-card img {
+  height: 300px;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.watch-card:hover img {
+  transform: scale(1.05);
+}
+
+.card-body {
+  padding: 25px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #1f2937, #374151);
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-text {
+  color: #e2e8f0;
+  font-weight: 500;
+  margin-bottom: 20px;
+  flex-grow: 1;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.price-tag {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #10b981;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.btn-dark {
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+  margin-top: auto;
+  font-size: 0.95rem;
+}
+
+.btn-dark:hover {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-4 {
+  margin-top: 2rem;
+}
+
+.view-all-btn {
+  background: linear-gradient(135deg, #1e3a8a, #3730a3);
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+}
+
+.view-all-btn:hover {
+  background: linear-gradient(135deg, #3730a3, #581c87);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.5);
+}
+
+.about-section {
+  background: linear-gradient(135deg, #111827, #1f2937);
+  padding: 60px 0;
+  color: #cbd5e1;
+}
+
+footer {
+  background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+  color: #cbd5e1 !important;
+  border-top: 1px solid #334155;
+  padding: 40px 0;
+}
+
+footer * {
+  color: #cbd5e1 !important;
+}
+
+footer a {
+  color: #06b6d4 !important;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: #0891b2 !important;
+}
+
+@media (max-width: 768px) {
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .watch-card img {
+    height: 250px;
+  }
+}
+</style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-white" href="#">Cartinix</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="homepage.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="Allproducts.html">Shop</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="Signin.html">Login/Signup</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Luxury Timepieces</h1>
+    <p>Discover elegance, precision, and timeless design</p>
+    <a href="Allproducts.html" class="btn btn-shop mt-3">Shop Now</a>
+  </section>
+
+  <!-- Featured Watches -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="section-heading">Featured Watches</h2>
+      <div class="row g-4" id="product"></div>
+    </div>
+  </section>
+
+ <footer class="text-white text-center py-4" style="background: linear-gradient(to right, #0f2027, #203a43, #2c5364);">
+  <div class="container">
+    <h5 class="fw-bold mb-3" style="font-family: 'Poppins', sans-serif;">
+      Cartinix – Redefining Time, One Watch at a Time
+    </h5>
+    <p style="max-width: 700px; margin: auto;">
+      We bring you <strong>100% original watches</strong> with unmatched quality, timeless designs, and reliable service.
+      Whether you're dressing up for success or gifting something memorable, our curated collection is designed to impress.
+      <br>Shop with confidence — <span class="text-warning">trusted by thousands across Pakistan.</span>
+    </p>
+
+    <div class="my-3">
+      <a href="https://www.instagram.com/p/DMCuw8TitCV/?img_index=1&igsh=N3BxYnhuamc4cHJh" target="_blank" class="btn btn-outline-light btn-sm me-2">
+        <i class="fab fa-instagram"></i> Instagram
+      </a>
+      <a href="https://s.daraz.pk/s.bihUF" target="_blank" class="btn btn-outline-light btn-sm">
+        <i class="fas fa-shopping-cart"></i> Daraz Store
+      </a>
+    </div>
+
+    <hr style="border-color: rgba(255, 255, 255, 0.1);" />
+    <p class="mb-0 small">&copy; 2025 WatchStore. All rights reserved.</p>
+  </div>
+</footer>
+
+
+  <script>
+    const card = document.getElementById("product");
+
+    fetch("http://localhost:8000/product-info")
+      .then(response => response.json())
+      .then(data => {
+        data.slice(0, 6).forEach((product, index) => {
+          const cardHTML = `
+            <div class="col-md-4">
+              <div class="card watch-card">
+                <img src="http://localhost:8000/photos/${product.image_path}" class="card-img-top" alt="Watch">
+                <div class="card-body text-center">
+                  <h5 class="card-title">${product.title}</h5>
+                  <p class="card-text">Price: ${product.price} Rs</p>
+                  <button class="btn btn-dark w-100" data-id="${product.sku}">View Details</button>
+                </div>
+              </div>
+            </div>
+          `;
+          card.innerHTML += cardHTML;
+        });
+
+        const btn = `<div class="text-center"><button class="view-all-btn">View All</button></div>`;
+        card.innerHTML += btn;
+
+        document.querySelectorAll(".btn[data-id]").forEach((btn, index) => {
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            localStorage.setItem("productid", btn.getAttribute("data-id"));
+            window.location.href = "viewdetail.html";
+          });
+        });
+
+        document.querySelector(".view-all-btn").addEventListener("click",(e)=>{
+            e.preventDefault();
+            window.location.href = "Allproducts.html"
+        })
+      })
+      .catch(error => {
+        console.error("Error fetching product info:", error);
+      });
+
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
