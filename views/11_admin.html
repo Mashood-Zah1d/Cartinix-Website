@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+ <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap');
+    
+    body {
+        margin: 0;
+        font-family: 'Outfit', sans-serif;
+        background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+        min-height: 100vh;
+        color: #e2e8f0;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, #1e3a8a, #3730a3, #581c87);
+        color: white;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        height: 60px;
+        box-shadow: 0 8px 32px rgba(30, 58, 138, 0.4);
+        border-bottom: 1px solid #334155;
+    }
+
+    .dashboard-header .brand {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #ffffff;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .dashboard-header .header-actions button {
+        background: linear-gradient(135deg, #06b6d4, #0891b2);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+    }
+
+    .dashboard-header .header-actions button:hover {
+        background: linear-gradient(135deg, #0891b2, #0e7490);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+    }
+
+    .dashboard {
+        display: flex;
+        height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+        width: 260px;
+        background: linear-gradient(180deg, #1e293b, #0f172a);
+        color: #e2e8f0;
+        padding-top: 24px;
+        flex-shrink: 0;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+        border-right: 1px solid #334155;
+    }
+
+    .sidebar a {
+        display: block;
+        color: #cbd5e1;
+        padding: 14px 20px;
+        margin: 8px 16px;
+        text-decoration: none;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .sidebar a:hover {
+        background: linear-gradient(135deg, #7c3aed, #6366f1);
+        color: white;
+        transform: translateX(6px);
+        border-color: #a855f7;
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+    }
+
+    .sidebar a.active {
+        background: linear-gradient(135deg, #059669, #10b981);
+        color: white;
+        box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+        border-color: #34d399;
+    }
+
+    .main-content {
+        flex-grow: 1;
+        padding: 32px;
+        background: linear-gradient(135deg, #111827, #1f2937);
+        overflow-y: auto;
+    }
+
+    .main-content h4 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 800;
+        color: #f8fafc;
+        font-size: 2.2rem;
+        text-align: center;
+        margin-bottom: 32px;
+        position: relative;
+        background: linear-gradient(135deg, #06b6d4, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .main-content h4::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, #06b6d4, #3b82f6, #8b5cf6);
+        margin: 16px auto 0;
+        border-radius: 3px;
+        box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4);
+    }
+
+    .product-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .product-card {
+        background: linear-gradient(135deg, #1f2937, #374151);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        padding: 28px;
+        transition: all 0.3s ease;
+        border: 1px solid #4b5563;
+    }
+
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        border-color: #06b6d4;
+        background: linear-gradient(135deg, #374151, #4b5563);
+    }
+
+    .product-row {
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, #1f2937, #374151);
+        padding: 20px 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        min-height: 80px;
+        width: 100%;
+        gap: 20px;
+        margin-bottom: 16px;
+        border-left: 4px solid #059669;
+        transition: all 0.3s ease;
+        border: 1px solid #4b5563;
+    }
+
+    .product-row:hover {
+        transform: translateX(8px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        border-left-color: #06b6d4;
+        border-color: #06b6d4;
+        background: linear-gradient(135deg, #374151, #4b5563);
+    }
+
+    .product-row img {
+        height: 65px;
+        width: 65px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        border: 2px solid #4b5563;
+    }
+
+    .product-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .product-details h6 {
+        margin: 0 0 6px 0;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #f8fafc;
+    }
+
+    .product-details p {
+        margin: 0;
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #94a3b8;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard {
+            flex-direction: column;
+        }
+        .sidebar {
+            width: 100%;
+            height: auto;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .main-content h4 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+  <div class="dashboard-header">
+    <div class="brand">Cartinx</div>
+    <div class="header-actions">
+      <button id="logout">Logout</button>
+    </div>
+  </div>
+
+  <div class="dashboard">
+    
+    <div class="sidebar">
+      <a href="11_admin.html">Dashboard</a>
+      <a href="13_manageproduct.html">Manage Products</a>
+      <a href="12_addproduct.html">Add Product</a>
+      <a href="15_showorders.html">Check Orders</a>
+      <a href="16_manageorder.html">Manage Orders</a>
+      <a href="19_myincome.html">My Income</a>
+    </div>
+
+    <div class="main-content">
+      <h4>Listed Products on the Store</h4>
+      <div class="product-list" id="productContainer">
+    
+      </div>
+      <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
+    </div>
+
+  </div>
+  <script>
+ const content = document.querySelector(".product-list");
+ const alert = document.getElementById("responseMessage");
+fetch(`http://localhost:8000/details`)
+  .then(async res => {
+    if (!res.ok) {
+      const text = await res.json();
+      alert.innerHTML = `<h5>${text.Error}</h5>`
+      alert.style.color = `red`
+      throw new Error(text.err);
+    }
+    return res.json();
+  })
+  .then(data => {
+    data.forEach(product => {
+      const listing = document.createElement("div");
+      listing.classList.add("product-row");
+      listing.innerHTML = `
+  <img src="http://localhost:8000/photos/${product.image_path}" alt="${product.product_name}">
+  <div class="product-details">
+    <h6>${product.title}</h6>
+    <p><strong>Brand:</strong> ${product.brand}</p>
+    <p><strong>Price:</strong> ${product.price}-/rs</p>
+    <p><strong>Qty:</strong> ${product.stock}</p>
+  </div>
+`;
+
+      content.appendChild(listing);
+    });
+  })
+  .catch(err => {
+    alert.innerHTML = `<h5>${err.message}</h5>`
+    alert.style.color = `red`
+  });
+
+  document.getElementById("logout").addEventListener("click",(e)=>{
+    e.preventDefault();
+    localStorage.removeItem("adminEmail");
+    window.location.href= 'homepage.html';
+  })
+</script>
+</body>
+</html>
