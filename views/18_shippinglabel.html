@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Shipping Label</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- html2pdf library -->
+
+
   <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
 
   <style>
@@ -22,7 +23,7 @@
       margin: auto;
       border: 1px solid #ccc;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
       page-break-inside: avoid;
       break-inside: avoid;
     }
@@ -87,6 +88,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="label-container" id="label">
@@ -130,12 +132,12 @@
       .then(async res => {
         if (!res.ok) {
           const text = await res.json();
-          window.scrollTo({top:0 , behavior:"smooth"});s
+          window.scrollTo({ top: 0, behavior: "smooth" }); s
           alert.innerHTML = `<h5>${text.err}</h5>`;
-          alert.style.color = 'red'    
+          alert.style.color = 'red'
           return;
         }
-        return res.json(); 
+        return res.json();
       })
       .then(data => {
         document.getElementById("name").innerText = data.customer_name;
@@ -148,29 +150,30 @@
         document.getElementById("amount").innerText = data.price;
         document.getElementById("quantity").innerText = data.quantity;
       })
-      .catch(err=>{
-         window.scrollTo({top:0 , behavior:"smooth"});s
+      .catch(err => {
+        window.scrollTo({ top: 0, behavior: "smooth" }); s
         alert.innerHTML = `<h5>${err.message}</h5>`;
-        alert.style.color = 'red'    
+        alert.style.color = 'red'
       })
 
     document.getElementById("download").addEventListener("click", (e) => {
       e.preventDefault();
       const element = document.getElementById("label");
-     html2pdf().set({
-     margin: 0.5,
-     filename: 'shipping_label.pdf',
-     image: { type: 'jpeg', quality: 0.98 },
-     html2canvas: {
-    scale: 2,
-    scrollY: 0
-  },
-  jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-  pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-}).from(element).save();
+      html2pdf().set({
+        margin: 0.5,
+        filename: 'shipping_label.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          scrollY: 0
+        },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      }).from(element).save();
 
     });
   </script>
 
 </body>
+
 </html>

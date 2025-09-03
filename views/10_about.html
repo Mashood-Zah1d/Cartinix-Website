@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,29 +11,42 @@
 
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background: #0f172a;
-      color: #f8fafc;
+      font-family: "Inter", sans-serif;
+      background: #ffffff;
+      color: #111827;
       margin: 0;
       padding: 0;
     }
 
     .navbar {
-      background: #0f172a;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      background: #ffffff;
+      height: 70px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
     }
-    .navbar a {
-      color: white !important;
-      padding: 10px 16px;
-      transition: color 0.3s ease;
+
+    .navbar .nav-link {
+      color: #111827 !important;
+      font-weight: 500;
+      margin-left: 10px;
+      padding: 6px 12px;
+      transition: all 0.3s ease;
+      border-radius: 8px;
     }
-    .navbar a:hover {
-      color: #06b6d4 !important;
+      
+    .logo{
+      height: 70px;
     }
-    .navbar-brand {
-      font-size: 1.6rem;
-      font-weight: bold;
-      color: #06b6d4 !important;
+    .navbar .nav-link.active {
+      background: #f3f4f6;
+      color: #000000 !important;
+    }
+
+    .navbar .nav-link:hover {
+      background: #111827;
+      color: #ffffff !important;
+      transform: translateY(-1px);
     }
 
     .about-section {
@@ -41,18 +55,20 @@
     }
 
     .about-section h2 {
-      font-size: 2.5rem;
-      font-weight: bold;
+      font-size: 2.2rem;
+      font-weight: 700;
       margin-bottom: 20px;
+      color: #111827;
     }
 
     .about-section p {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       max-width: 800px;
       margin: 0 auto;
-      color: #cbd5e1;
+      color: #374151;
     }
 
+    /* Features */
     .features {
       margin-top: 50px;
     }
@@ -63,72 +79,88 @@
 
     .feature-icon {
       font-size: 2.5rem;
-      color: #06b6d4;
+      color: #2563eb;
       margin-bottom: 15px;
     }
 
+    /* Footer */
     footer {
-      background: #0f172a;
-      border-top: 1px solid #334155;
+      background: #f9fafb;
+      border-top: 1px solid #e5e7eb;
       padding: 60px 20px 40px;
-      color: #cbd5e1;
+      color: #374151;
       text-align: center;
     }
+
     footer h5 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin-bottom: 15px;
       font-weight: 600;
+      color: #111827;
     }
+
     footer p {
       max-width: 700px;
       margin: 0 auto 20px;
       font-size: 0.95rem;
+      color: #4b5563;
     }
+
     footer a {
-      color: #06b6d4 !important;
+      color: #2563eb !important;
+      transition: color 0.3s ease;
     }
+
     footer a:hover {
-      color: #0ea5e9 !important;
+      color: #1d4ed8 !important;
     }
+
     footer hr {
       margin: 20px auto;
-      border-color: rgba(255, 255, 255, 0.1);
+      border-color: #e5e7eb;
     }
   </style>
+
 </head>
+
 <body>
 
   <nav class="navbar navbar-expand-lg shadow-sm">
     <div class="container">
-      <a class="navbar-brand fw-bold text-white" href="#">Cartinix</a>
+      <a class="navbar-brand d-flex align-items-center" href="2_homepage.html">
+        <img class="logo" src="http://localhost:8000/photos/logo.jpg" alt="Cartinix Logo" class="logo-img me-2" />
+        <span class="text-white fw-bold">Cartinix</span>
+      </a>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
           <li class="nav-item"><a class="nav-link active" href="2_homepage.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="3_Allproducts.html">Shop</a></li>
-        <li class="nav-item"><a class="nav-link" href="10_about.html">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="9_myorders.html">My Orders</a></li>
-        <li class="nav-item"><a class="nav-link" href="1_Signin.html">Login/Signup</a></li>
-        <li class="nav-item"><a class="nav-link" id="logout">Logout</a></li>
-        <li class="nav-item">
-          <a class="nav-link position-relative" href="7_showcart.html">
-            <i class="fas fa-shopping-cart"></i>
-          </a>
+          <li class="nav-item"><a class="nav-link" href="3_Allproducts.html">Shop</a></li>
+          <li class="nav-item"><a class="nav-link" href="10_about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="9_myorders.html">My Orders</a></li>
+          <li class="nav-item"><a class="nav-link" href="1_Signin.html">Login/Signup</a></li>
+          <li class="nav-item"><a class="nav-link" id="logout">Logout</a></li>
+          <li class="nav-item">
+            <a class="nav-link position-relative" href="7_showcart.html">
+              <i class="fas fa-shopping-cart"></i>
+            </a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-
   <!-- About Section -->
   <section class="about-section">
     <div class="container">
       <h2>About Cartinix</h2>
       <p>
-        Cartinix is your trusted destination for 100% original watches that blend timeless elegance with modern flair. 
-        We handpick every watch to ensure superior craftsmanship, durability, and style for our customers across Pakistan.
+        Cartinix is your trusted destination for 100% original watches that blend timeless elegance with modern flair.
+        We handpick every watch to ensure superior craftsmanship, durability, and style for our customers across
+        Pakistan.
       </p>
 
       <div class="row features mt-5">
@@ -158,13 +190,16 @@
         Cartinix – Redefining Time, One Watch at a Time
       </h5>
       <p>
-        We bring you <strong>100% original watches</strong> with unmatched quality, timeless designs, and reliable service.
-        Whether you're dressing up for success or gifting something memorable, our curated collection is designed to impress.
+        We bring you <strong>100% original watches</strong> with unmatched quality, timeless designs, and reliable
+        service.
+        Whether you're dressing up for success or gifting something memorable, our curated collection is designed to
+        impress.
         <br>Shop with confidence — <span class="text-warning">trusted by thousands across Pakistan.</span>
       </p>
 
       <div class="my-3">
-        <a href="https://www.instagram.com/p/DMCuw8TitCV/?img_index=1&igsh=N3BxYnhuamc4cHJh" target="_blank" class="btn btn-outline-light btn-sm me-2">
+        <a href="https://www.instagram.com/p/DMCuw8TitCV/?img_index=1&igsh=N3BxYnhuamc4cHJh" target="_blank"
+          class="btn btn-outline-light btn-sm me-2">
           <i class="fab fa-instagram"></i> Instagram
         </a>
         <a href="https://s.daraz.pk/s.bihUF" target="_blank" class="btn btn-outline-light btn-sm">
@@ -179,4 +214,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

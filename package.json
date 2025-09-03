@@ -1,18 +1,26 @@
 {
-  "name": "ecommerce-website",
+  "name": "cartinix-website",
   "version": "1.0.0",
+  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mashood-Zah1d/Cartinix-Website.git"
+  },
   "author": "",
   "license": "ISC",
-  "description": "",
+  "bugs": {
+    "url": "https://github.com/Mashood-Zah1d/Cartinix-Website/issues"
+  },
+  "homepage": "https://github.com/Mashood-Zah1d/Cartinix-Website#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "bootstrap": "^5.3.7",
     "cors": "^2.8.5",
-    "express.js": "^1.0.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.5",
     "nodemon": "^3.1.10",

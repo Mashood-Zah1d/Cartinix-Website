@@ -1,196 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Product Details</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display&display=swap"
+    rel="stylesheet">
   <style>
-body {
-  background: linear-gradient(135deg, #0f172a, #1e293b, #374151);
-  font-family: 'Inter', sans-serif;
-  color: #f8fafc;
-}
+    body {
+      background: #ffffff;
+      font-family: 'Inter', sans-serif;
+      color: #111827;
+    }
+     
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      padding: 20px;
+    }
 
-.card {
-  border-radius: 20px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-  background: linear-gradient(135deg, #1f2937, #374151);
-  border: 1px solid #4b5563;
-}
+    h2.text-center {
+      color: #111827;
+      font-weight: 700;
+    }
 
-h2.text-center {
-  color: #f8fafc;
-  font-weight: 700;
-}
+    .carousel-item img {
+      border-radius: 12px;
+      max-height: 500px;
+      object-fit: cover;
+      width: 100%;
+      border: 1px solid #e5e7eb;
+    }
 
-.carousel-item img {
-  border-radius: 15px;
-  max-height: 500px;
-  object-fit: cover;
-  width: 100%;
-  border: 2px solid #4b5563;
-}
+    #productDescription {
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: #374151;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
 
-#productDescription {
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: #cbd5e1;
-  margin-bottom: 20px;
-  line-height: 1.6;
-}
+    .product-info-list {
+      list-style: none;
+      padding: 0;
+    }
 
-.product-info-list {
-  color: #e2e8f0;
-  list-style: none;
-  padding: 0;
-}
+    .product-info-list li {
+      color: #111827;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
 
-.product-info-list li {
-  color: #e2e8f0;
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin-bottom: 12px;
-  padding: 8px 0;
-  border-bottom: 1px solid #374151;
-}
+    #price {
+      color: #111827;
+      font-weight: 800;
+      font-size: 1.8rem;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      text-align: left;
+    }
 
-#price {
-  color:  #06b6d4;
-  font-weight: 800;
-  font-size: 1.8rem;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  text-align: left;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-}
+    .custom-btn {
+      background: #111827;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      margin-right: 10px;
+      cursor: pointer;
+    }
 
-.custom-btn {
-  background: linear-gradient(135deg, #7c3aed, #6366f1, #8b5cf6);
-  color: white;
-  border: none;
-  padding: 14px 28px;
-  font-size: 16px;
-  font-weight: 700;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-  transition: all 0.3s ease;
-  margin-right: 10px;
-}
+    .custom-btn:hover {
+      background: #000000;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    }
 
-.custom-btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.6);
-  background: linear-gradient(135deg, #6366f1, #4f46e5, #7c3aed);
-}
+    .custom-btn.secondary {
+      background: #ef4444;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
 
-.custom-btn.secondary {
-  background: linear-gradient(135deg, #dc2626, #ef4444, #f87171);
-  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
-}
+    .custom-btn.secondary:hover {
+      background: #dc2626;
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.4);
+    }
 
-.custom-btn.secondary:hover {
-  background: linear-gradient(135deg, #b91c1c, #dc2626, #ef4444);
-  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.6);
-}
+    .product-title {
+      color: #111827;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 25px;
+      text-align: center;
+    }
 
-.product-title {
-  color: #f8fafc;
-  font-size: 2.2rem;
-  font-weight: 800;
-  margin-bottom: 25px;
-  text-align: center;
-  background: linear-gradient(135deg, #06b6d4, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+    .thumbnail-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-right: 20px;
+    }
 
-.thumbnail-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-right: 20px;
-}
+    .thumbnail-container img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-.thumbnail-container img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 2px solid #4b5563;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+    .thumbnail-container img:hover {
+      border-color: #111827;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
 
-.thumbnail-container img:hover {
-  border-color: #06b6d4;
-  transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
-}
+    .carousel-wrapper {
+      display: flex;
+      gap: 20px;
+    }
 
-.carousel-wrapper {
-  display: flex;
-  gap: 20px;
-}
+    .color-options {
+      margin-top: 25px;
+    }
 
-.color-options {
-  margin-top: 25px;
-}
+    .color-options button {
+      min-width: 120px;
+      height: 44px;
+      background-color: #f3f4f6;
+      border-radius: 8px;
+      margin-top: 10px;
+      margin-right: 12px;
+      border: 1px solid #d1d5db;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-.color-options button {
-  width: 150px;
-  height: 50px;
-  background-color:  #4b5563;
-  border-radius: 20px;
-  margin-top: 10px;
-  margin-right: 12px;
-  border: 3px solid #4b5563;
-  outline: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+    .color-options button:hover {
+      transform: scale(1.05);
+      border-color: #111827;
+      background-color: #e5e7eb;
+    }
 
-.color-options button:hover {
-  transform: scale(1.15);
-  border-color: #06b6d4;
-  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
-}
+    .color-options button.selected-color {
+      border-color: #111827;
+      background-color: #111827;
+      color: white;
+    }
 
-h2.stylish-heading {
-  font-family: 'Playfair Display', serif;
-  font-size: 3rem;
-  text-align: center;
-  margin-top: 40px;
-  color: #f8fafc;
-  background: linear-gradient(135deg, #06b6d4, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.color-options button.selected-color {
-  border-color: #06b6d4;
-  background-color: #0ea5e9;
-  color: white;
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
-}
+    h2.stylish-heading,
+    h4.stylish-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      text-align: center;
+      margin-top: 30px;
+      color: #111827;
+    }
+  </style>
 
-h4.stylish-heading {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
-  text-align: center;
-  margin-top: 40px;
-  color: #f8fafc;
-  background: linear-gradient(135deg, #06b6d4, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-</style>
 </head>
+
 <body>
   <div class="container py-5">
     <h2 class="text-center mb-4 stylish-heading">Product Details</h2>
@@ -199,15 +182,17 @@ h4.stylish-heading {
         <div class="col-md-6">
           <div class="carousel-wrapper">
             <div class="thumbnail-container" id="thumbnailContainer">
-             
+
             </div>
             <div id="carouselExample" class="carousel slide" data-bs-ride="false" style="flex: 1;">
               <div class="carousel-inner" id="imageCarousel">
               </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                data-bs-slide="prev">
                 <span class="carousel-control-prev-icon"></span>
               </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                data-bs-slide="next">
                 <span class="carousel-control-next-icon"></span>
               </button>
             </div>
@@ -226,7 +211,7 @@ h4.stylish-heading {
           <p id="productDescription"></p>
 
           <div class="color-options" id="colorOptions">
-           
+
           </div>
 
           <div class="d-flex flex-wrap justify-content-center mt-4">
@@ -248,12 +233,12 @@ h4.stylish-heading {
       .then(async res => {
         if (!res.ok) {
           const text = await res.json();
-          alert.innerHTML =`<h4>${text.Error}</h4>`;
+          alert.innerHTML = `<h4>${text.Error}</h4>`;
           alert.style.color = "red";
           setTimeout(() => {
-        alert.innerHTML='';
-      }, 1500);
-      return;
+            alert.innerHTML = '';
+          }, 1500);
+          return;
         }
         return res.json();
       })
@@ -283,61 +268,61 @@ h4.stylish-heading {
             carouselItems[index].classList.add("active");
           };
           document.getElementById("thumbnailContainer").appendChild(thumb);
+        })
+        data.color.forEach((color, index) => {
+          const btn = document.createElement("button");
+          btn.title = color.color_name;
+          btn.innerText = color.color_name;
+
+          btn.onclick = () => {
+            localStorage.setItem("color", btn.innerText);
+            document.querySelectorAll(".color-options button").forEach(button => {
+              button.classList.remove("selected-color");
+            });
+
+            btn.classList.add("selected-color");
+            const carouselItems = document.querySelectorAll(".carousel-item");
+            carouselItems.forEach(item => item.classList.remove("active"));
+            carouselItems[index].classList.add("active");
+          };
+
+          coloroption.appendChild(btn);
+        });
+      });
+
+    document.getElementById("buynow").addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const product_sku = localStorage.getItem("productid");
+      const color = localStorage.getItem("color");
+      const customer_email = localStorage.getItem("customerEmail");
+      if (!product_sku || !color || !customer_email) {
+        alert.innerHTML = `<h4>Missing product info or login.</h4>`;
+        alert.style.color = "red";
+        setTimeout(() => {
+          alert.innerHTML = '';
+        }, 1500);
+        return;
+      }
+      window.location.href = "5_buynow.html"
+
     })
-   data.color.forEach((color, index) => {
-  const btn = document.createElement("button");
-  btn.title = color.color_name;
-  btn.innerText = color.color_name;
 
-  btn.onclick = () => {
-    localStorage.setItem("color", btn.innerText);
-    document.querySelectorAll(".color-options button").forEach(button => {
-      button.classList.remove("selected-color");
-    });
+    document.getElementById("addtocart").addEventListener("click", (e) => {
+      e.preventDefault();
+      const product_sku = localStorage.getItem("productid");
+      const color = localStorage.getItem("color");
+      const customer_email = localStorage.getItem("customerEmail");
+      if (!product_sku || !color || !customer_email) {
+        alert.innerHTML = `<h4>Missing product info or login.</h4>`;
+        alert.style.color = "red";
+        setTimeout(() => {
+          alert.innerHTML = '';
+        }, 1500);
+        return;
+      }
 
-    btn.classList.add("selected-color");
-    const carouselItems = document.querySelectorAll(".carousel-item");
-    carouselItems.forEach(item => item.classList.remove("active"));
-    carouselItems[index].classList.add("active");
-  };
-
-  coloroption.appendChild(btn);
-});
-});
-
-document.getElementById("buynow").addEventListener("click",(e)=>{
-    e.preventDefault();
-  
-    const product_sku = localStorage.getItem("productid");
-    const color = localStorage.getItem("color");
-    const customer_email = localStorage.getItem("customerEmail"); 
-    if (!product_sku || !color || !customer_email) {
-      alert.innerHTML =`<h4>Missing product info or login.</h4>`;
-      alert.style.color = "red";
-      setTimeout(() => {
-        alert.innerHTML='';
-      }, 1500);
-      return;
-    }
-    window.location.href = "5_buynow.html"
-
-})
-
-document.getElementById("addtocart").addEventListener("click",(e)=>{
-    e.preventDefault();
-    const product_sku = localStorage.getItem("productid");
-    const color = localStorage.getItem("color");
-    const customer_email = localStorage.getItem("customerEmail"); 
-    if (!product_sku || !color || !customer_email) {
-      alert.innerHTML =`<h4>Missing product info or login.</h4>`;
-      alert.style.color = "red";
-      setTimeout(() => {
-        alert.innerHTML='';
-      }, 1500);
-      return;
-    }
-
-       fetch("http://localhost:8000/addtocart", {
+      fetch("http://localhost:8000/addtocart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -348,26 +333,27 @@ document.getElementById("addtocart").addEventListener("click",(e)=>{
           customer_email,
         }),
       })
-      .then(data=> {
-      localStorage.removeItem("color");
-      alert.innerHTML =`<h4>Product Added To Cart</h4>`;
-      alert.style.color = "green";
-      setTimeout(() => {
-        alert.innerHTML='';
-      }, 1000);
-    })
-    .catch (err=> {
-      alert.innerHTML =`<h4>Network error. Try again.</h4>`;
-      alert.style.color = "red";
+        .then(data => {
+          localStorage.removeItem("color");
+          alert.innerHTML = `<h4>Product Added To Cart</h4>`;
+          alert.style.color = "green";
+          setTimeout(() => {
+            alert.innerHTML = '';
+          }, 1000);
+        })
+        .catch(err => {
+          alert.innerHTML = `<h4>Network error. Try again.</h4>`;
+          alert.style.color = "red";
 
-    setTimeout(() => {
-        alert.innerHTML='';
-      }, 1000);
-    })
+          setTimeout(() => {
+            alert.innerHTML = '';
+          }, 1000);
+        })
     }
-  )
+    )
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

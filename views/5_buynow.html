@@ -1,99 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Place Your Order</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
-      background: linear-gradient(to right, #1e1e2f, #2c2c3a);
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
+      background: #ffffff;
+      color: #111827;
+      font-family: 'Inter', sans-serif;
       padding: 30px;
     }
 
     .order-container {
       max-width: 700px;
       margin: auto;
-      background: linear-gradient(135deg, #1f2937, #374151);
+      background: #ffffff;
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e5e7eb;
     }
 
     .section-title {
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       font-size: 1.5rem;
       font-weight: 600;
-      border-bottom: 2px solid #06b6d4;
-      padding-bottom: 5px;
+      border-bottom: 2px solid #111827;
+      padding-bottom: 6px;
+      color: #111827;
     }
 
     .form-control {
-      background-color: transparent;
-      border: 1px solid #555;
-      color: white;
-      padding: 10px;
-      border-radius: 10px;
+      width: 100%;
+      background-color: #ffffff;
+      border: 1px solid #d1d5db;
+      color: #111827;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
     }
 
     .form-control:focus {
-      border-color: #0ff;
-      box-shadow: 0 0 5px rgba(0, 255, 255, 0.4);
+      border-color: #111827;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15);
+      outline: none;
+      background: #ffffff;
+      color: #111827;
+    }
+
+    .form-control:disabled {
+      background: #f9fafb;
+      color: #9ca3af;
+      border-color: #e5e7eb;
+      cursor: not-allowed;
     }
 
     .btn-place-order {
       width: 100%;
-      background-color: #06b6d4;
-      color: white;
+      background-color: #111827;
+      color: #ffffff;
       font-weight: 600;
       padding: 12px;
       border: none;
-      border-radius: 10px;
-      transition: background-color 0.3s ease;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
     }
 
     .btn-place-order:hover {
-      background-color: #0891b2;
+      background-color: #000000;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
     }
 
     .product-info {
-      background-color: rgba(255, 255, 255, 0.05);
+      background-color: #f9fafb;
       padding: 20px;
       border-radius: 10px;
       margin-bottom: 30px;
+      border: 1px solid #e5e7eb;
     }
 
     .product-info p {
       margin: 0;
       font-size: 15px;
+      color: #374151;
     }
+
     #image {
-  height: 100px;
-  width: 100px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #555;
-  display: block;
-   }  
-   .form-control:focus {
-  border-color: #06b6d4;
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
-  outline: none;
-  background: #475569;
-  color: white;
-}
-   .form-control:disabled {
-  background: #1f2937;
-  color: #6b7280;
-  border-color: #374151;
-  opacity: 1.0;
-  cursor: not-allowed;
-}
+      height: 100px;
+      width: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #d1d5db;
+      display: block;
+    }
   </style>
+
 </head>
+
 <body>
   <div class="order-container">
     <h2 class="text-center mb-4">Complete Your Order</h2>
@@ -126,7 +139,7 @@
         <label for="customerPhone" class="form-label">Phone Number</label>
         <input type="tel" class="form-control" id="customerPhone" required>
       </div>
-      
+
       <div class="mb-3">
         <label for="customerAddress" class="form-label"> Address</label>
         <input type="text" class="form-control" id="customerAddress" required>
@@ -147,90 +160,91 @@
         <label for="color" class="form-label"> Color</label>
         <input type="text" class="form-control" id="color" required>
       </div>
-      
+
       <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
 
       <button type="submit" class="btn-place-order" id="order">Place Order</button>
     </form>
   </div>
 
-    
-<script>
-const productid = localStorage.getItem("productid");
-const selectedColor = localStorage.getItem("color");
-const alert = document.getElementById("responseMessage")
 
-fetch(`http://localhost:8000/product-details?productid=${productid}`)
-  .then(async res => {
-    if (!res.ok) {
-      const text = await res.json();
-      alert.innerHTML=`<h5>${text.err}</h5>`
-      return;
-    }
-    return res.json();
-  })
-  .then(data => {
-    document.getElementById("image").src = `http://localhost:8000/photos/${data.details.image_path}`;
-    document.getElementById("productName").innerText = data.details.title;
-    document.getElementById("productSku").innerText = data.details.sku;
-    document.getElementById("Stock").innerText = data.details.stock;
-    document.getElementById("productPrice").innerText = data.details.price;
+  <script>
+    const productid = localStorage.getItem("productid");
+    const selectedColor = localStorage.getItem("color");
+    const alert = document.getElementById("responseMessage")
 
-    const paymentInput = document.getElementById("payment");
-    const colorInput = document.getElementById("color");
-
-    paymentInput.value = "COD";
-    colorInput.value = selectedColor;
-    paymentInput.disabled = true;
-    colorInput.disabled = true;
-
-    document.getElementById("orderForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById("customerName").value;
-      const phone = document.getElementById("customerPhone").value;
-      const email = document.getElementById("customerEmail").value;
-      const address = document.getElementById("customerAddress").value;
-      const quantity = parseInt(document.getElementById("quantity").value, 10);
-      const color = selectedColor;
-      const price = parseFloat(data.details.price);
-      const sku = data.details.sku;
-
-      fetch(`http://localhost:8000/buynow`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, email, address, quantity, color, price, sku })
+    fetch(`http://localhost:8000/product-details?productid=${productid}`)
+      .then(async res => {
+        if (!res.ok) {
+          const text = await res.json();
+          alert.innerHTML = `<h5>${text.err}</h5>`
+          return;
+        }
+        return res.json();
       })
+      .then(data => {
+        document.getElementById("image").src = `http://localhost:8000/photos/${data.details.image_path}`;
+        document.getElementById("productName").innerText = data.details.title;
+        document.getElementById("productSku").innerText = data.details.sku;
+        document.getElementById("Stock").innerText = data.details.stock;
+        document.getElementById("productPrice").innerText = data.details.price;
 
-        .then(async res => {
-          if (!res.ok) {
-            const text = await res.json();
-            alert.innerHTML = `<h5>${text.message}</h5>`;
-            alert.style.color = 'red';
-            return;
-          }
-          return res.json();
-        })
-        .then(data => {
-          localStorage.setItem("OrderId",data.order_id);
-          alert.innerHTML = `<h5>Your Order Has been Placed</h5>`;
-          alert.style.color = 'Green';
-          setTimeout(() => {
-            window.location.href = "6_orderslip.html"
-          }, 1000);
-        })
-        .catch(err => {
-          alert.innerHTML = `<h5>${err.message}</h5>`;
-          alert.style.color = 'red';
+        const paymentInput = document.getElementById("payment");
+        const colorInput = document.getElementById("color");
+
+        paymentInput.value = "COD";
+        colorInput.value = selectedColor;
+        paymentInput.disabled = true;
+        colorInput.disabled = true;
+
+        document.getElementById("orderForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const name = document.getElementById("customerName").value;
+          const phone = document.getElementById("customerPhone").value;
+          const email = document.getElementById("customerEmail").value;
+          const address = document.getElementById("customerAddress").value;
+          const quantity = parseInt(document.getElementById("quantity").value, 10);
+          const color = selectedColor;
+          const price = parseFloat(data.details.price);
+          const sku = data.details.sku;
+
+          fetch(`http://localhost:8000/buynow`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, phone, email, address, quantity, color, price, sku })
+          })
+
+            .then(async res => {
+              if (!res.ok) {
+                const text = await res.json();
+                alert.innerHTML = `<h5>${text.message}</h5>`;
+                alert.style.color = 'red';
+                return;
+              }
+              return res.json();
+            })
+            .then(data => {
+              localStorage.setItem("OrderId", data.order_id);
+              alert.innerHTML = `<h5>Your Order Has been Placed</h5>`;
+              alert.style.color = 'Green';
+              setTimeout(() => {
+                window.location.href = "6_orderslip.html"
+              }, 1000);
+            })
+            .catch(err => {
+              alert.innerHTML = `<h5>${err.message}</h5>`;
+              alert.style.color = 'red';
+            });
         });
-    });
-  })
-  .catch(err => {
-    alert.innerHTML = `<h5>${err.message}</h5>`;
-    alert.style.color = 'red';
-  });
+      })
+      .catch(err => {
+        alert.innerHTML = `<h5>${err.message}</h5>`;
+        alert.style.color = 'red';
+      });
 
 
-</script>  
+  </script>
 </body>
+
 </html>

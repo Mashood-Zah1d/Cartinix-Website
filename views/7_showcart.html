@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shopping Cart</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Outfit', sans-serif;
-      background-color: #0f172a;
-      color: #e2e8f0;
+      background-color: #ffffff;
+      color: #111827;
       padding: 40px 20px;
     }
 
     .container {
       max-width: 1000px;
       margin: auto;
-      background: #1e293b;
+      background: #ffffff;
       border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
     }
 
     .cart-title {
@@ -28,14 +29,15 @@
       font-weight: 700;
       text-align: center;
       margin-bottom: 30px;
-      color: #38bdf8;
+      color: #111827;
     }
 
     .cart-item {
+      position: relative;
       display: flex;
       align-items: center;
       padding: 16px 0;
-      border-bottom: 1px solid #334155;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .cart-item:last-child {
@@ -48,6 +50,7 @@
       object-fit: cover;
       border-radius: 12px;
       margin-right: 20px;
+      border: 1px solid #e5e7eb;
     }
 
     .item-details {
@@ -58,96 +61,68 @@
       margin: 0 0 5px;
       font-size: 1.1rem;
       font-weight: 600;
+      color: #111827;
     }
 
     .item-details p {
+      margin: 0;
       font-size: 0.9rem;
-      color: #94a3b8;
-      margin: 0;
+      color: #6b7280;
     }
 
-    .item-price p {
-      margin: 0;
-      font-weight: 600;
-      color: #34d399;
+    .item-price {
+      font-weight: 700;
+      color: #111827;
+      font-size: 1rem;
     }
 
-    .cart-summary {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 2px solid #475569;
+    .remove-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .remove-btn:hover {
+      color: #dc2626;
+    }
+
+    .cart-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding-top: 20px;
     }
 
-    .cart-summary h4 {
+    .total-price {
+      font-size: 1.3rem;
       font-weight: 700;
+      color: #111827;
     }
 
     .checkout-btn {
-      padding: 10px 25px;
+      background-color: #111827;
+      color: #ffffff;
+      padding: 12px 28px;
+      border-radius: 10px;
       border: none;
-      background: #22c55e;
-      color: #fff;
       font-weight: 600;
-      border-radius: 8px;
-      transition: background 0.3s ease;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
 
     .checkout-btn:hover {
-      background: #16a34a;
+      background-color: #374151;
     }
-
-    @media (max-width: 768px) {
-      .cart-item {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .item-price {
-        align-self: flex-end;
-      }
-
-      .cart-summary {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-
-      .checkout-btn {
-        width: 100%;
-      }
-    }
-
-    .cart-item {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  padding: 16px 0;
-  border-bottom: 1px solid #334155;
-}
-
-.cart-item .delete-btn {
-  position: absolute;
-  bottom: 16px;
-  right: 0;
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-
-.cart-item .delete-btn:hover {
-  background-color: #dc2626;
-}
-
   </style>
+
 </head>
+
 <body>
 
   <div class="container">
@@ -167,33 +142,33 @@
     const alert = document.getElementById("responseMessage");
 
     if (!email) {
-    alert.innerHTML = `<p>Missing customer email. Please login again.</p>`;
-    alert.style.color = "red";
-    return;
-   }
+      alert.innerHTML = `<p>Missing customer email. Please login again.</p>`;
+      alert.style.color = "red";
+      return;
+    }
 
     fetch(`http://localhost:8000/showcart?email=${email}`)
       .then(async res => {
         if (!res.ok) {
           const text = await res.json();
-        alert.innerHTML=`<p>Error fetching order data.</p>`
-        alert.style.color = 'red';
+          alert.innerHTML = `<p>Error fetching order data.</p>`
+          alert.style.color = 'red';
         }
         return res.json();
       })
       .then(data => {
-       let total = 0;
+        let total = 0;
 
-data.forEach((product) => {
-  const price = parseInt(product.price);
-  const item = document.createElement("div");
-  item.classList.add("cart-item");
+        data.forEach((product) => {
+          const price = parseInt(product.price);
+          const item = document.createElement("div");
+          item.classList.add("cart-item");
 
-  const quantity = 0;
-  const itemTotal = price * quantity;
-  total += itemTotal;
+          const quantity = 0;
+          const itemTotal = price * quantity;
+          total += itemTotal;
 
-  item.innerHTML = `
+          item.innerHTML = `
     <img src="http://localhost:8000/photos/${product.image_path}" alt="${product.title}">
     <div class="item-details">
       <h5>${product.title}</h5>
@@ -208,72 +183,73 @@ data.forEach((product) => {
     </div>
      <button class="delete-btn">Delete</button>
   `;
-  cartTotal.innerText=total
-  cartItems.appendChild(item);
-  const deleteBtn = item.querySelector(".delete-btn");
-deleteBtn.addEventListener("click", () => {
-  fetch("http://localhost:8000/deletecart", {
-    method: "put",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sku: product.sku, email })
-  })
-  .then(res => {
-    if (res.ok) {
-      item.remove();
-      recalculateTotal(); 
-      alert.innerHTML = "<p>Product Deleted</p>";
-      alert.style.color = "green";
-    } else {
-      alert.innerHTML = `<p>Error Loading Cart ${err.message}</p>`
-      alert.style.color = "red";
-    }
-  })
-  .catch(err => {
-    alert.innerHTML = `<p>Error Deleting Product ${err.message}</p>`
-    alert.style.color = "red";
-  });
-});
+          cartTotal.innerText = total
+          cartItems.appendChild(item);
+          const deleteBtn = item.querySelector(".delete-btn");
+          deleteBtn.addEventListener("click", () => {
+            fetch("http://localhost:8000/deletecart", {
+              method: "put",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ sku: product.sku, email })
+            })
+              .then(res => {
+                if (res.ok) {
+                  item.remove();
+                  recalculateTotal();
+                  alert.innerHTML = "<p>Product Deleted</p>";
+                  alert.style.color = "green";
+                } else {
+                  alert.innerHTML = `<p>Error Loading Cart ${err.message}</p>`
+                  alert.style.color = "red";
+                }
+              })
+              .catch(err => {
+                alert.innerHTML = `<p>Error Deleting Product ${err.message}</p>`
+                alert.style.color = "red";
+              });
+          });
 
-  const qtyInput = item.querySelector(".quantity-input");
-  const itemTotalDisplay = item.querySelector(".item-total");
-  const sku = product.sku;
-  qtyInput.addEventListener("input", () => {
-    const newQty = parseInt(qtyInput.value) || 1;
-    fetch(`http://localhost:8000/updatequantity`,{
-         method: "put",
-          headers:{"Content-Type": "application/json"},
-          body: JSON.stringify({email,sku,newQty})
+          const qtyInput = item.querySelector(".quantity-input");
+          const itemTotalDisplay = item.querySelector(".item-total");
+          const sku = product.sku;
+          qtyInput.addEventListener("input", () => {
+            const newQty = parseInt(qtyInput.value) || 1;
+            fetch(`http://localhost:8000/updatequantity`, {
+              method: "put",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, sku, newQty })
+            })
+            const newItemTotal = price * newQty;
+            itemTotalDisplay.innerText = `Subtotal: Rs. ${newItemTotal}`;
+            recalculateTotal();
+          });
+        });
+
+
+        function recalculateTotal() {
+          let newTotal = 0;
+          document.querySelectorAll(".cart-item").forEach(item => {
+            const qty = parseInt(item.querySelector(".quantity-input").value);
+            const pricetext = item.querySelector(".item-price").innerText;
+            const price = parseInt(pricetext.replace("Price: Rs.", ""));
+
+            newTotal += qty * price;
+          });
+
+          cartTotal.innerText = newTotal;
+        }
+      })
+      .catch(err => {
+        alert.innerHTML = `<p>Error Loading Cart ${err.message}</p>`
+        alert.style.color = "red";
+        ;
+      });
+
+    document.querySelector(".checkout-btn").addEventListener("click", () => {
+      window.location.href = "8_checkoutpage.html";
     })
-    const newItemTotal = price * newQty;
-    itemTotalDisplay.innerText = `Subtotal: Rs. ${newItemTotal}`;
-    recalculateTotal();
-  });
-});
-
-
-function recalculateTotal() {
-  let newTotal = 0;
-  document.querySelectorAll(".cart-item").forEach(item => {
-    const qty = parseInt(item.querySelector(".quantity-input").value);
-    const pricetext = item.querySelector(".item-price").innerText;
-    const price = parseInt(pricetext.replace("Price: Rs.", ""));
-
-    newTotal += qty * price;
-  });
-
-  cartTotal.innerText = newTotal;
-}
-})
-.catch(err => {
-alert.innerHTML = `<p>Error Loading Cart ${err.message}</p>`
-alert.style.color = "red";
-;
-});
-
-document.querySelector(".checkout-btn").addEventListener("click",()=>{
-    window.location.href = "8_checkoutpage.html";
-})
 
   </script>
 </body>
+
 </html>
