@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "type": "module",
   "scripts": {
-  "start": "node app.js"
-},
+    "start": "nodemon src/app.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Mashood-Zah1d/Cartinix-Website.git"
@@ -23,8 +24,10 @@
     "express": "^5.1.0",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.5",
-    "nodemon": "^3.1.10",
     "path": "^0.12.7",
     "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }

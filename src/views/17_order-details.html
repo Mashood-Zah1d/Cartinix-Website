@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #ffffff;
+      color: #000000;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .order-container {
+      max-width: 1000px;
+      margin: 50px auto;
+      background-color: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    .card-box {
+      background-color: #f9fafb;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .card-box h5 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #06b6d4;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .row-line {
+      padding: 10px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+    }
+
+    .row-line:last-child {
+      border-bottom: none;
+    }
+
+    .order-layout {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .image-box {
+      flex: 1;
+      min-width: 280px;
+      max-width: 350px;
+      background-color: #f9fafb;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid #e5e7eb;
+    }
+
+    .product-image {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .image-box p {
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .button-wrapper {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 10;
+    }
+
+    .action-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .action-button.ship {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+    }
+
+    .action-button.ship:hover {
+      background: linear-gradient(135deg, #0891b2, #0e7490);
+      transform: translateY(-2px);
+    }
+
+    .action-button.delivered {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .action-button.delivered:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .order-layout {
+        flex-direction: column;
+      }
+
+      .button-wrapper {
+        right: 15px;
+        bottom: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="order-container">
+    <h2 class="section-title">Order Summary</h2>
+    <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
+    <div class="card-box">
+      <h5>Customer Details</h5>
+      <div class="row-line"><strong>Name:</strong> <span id="customerName"></span></div>
+      <div class="row-line"><strong>Address:</strong> <span id="customerAddress"></span></div>
+      <div class="row-line"><strong>Phone:</strong> <span id="customerPhone"></span></div>
+      <div class="row-line"><strong>Email:</strong> <span id="customerEmail"></span></div>
+    </div>
+
+    <div class="order-layout" id="orderItemsBox">
+      <!-- Products will be injected here -->
+    </div>
+  </div>
+
+  <div class="button-wrapper">
+    <button class="action-button ship" id="ship">Ship Order</button>
+    <button class="action-button delivered" id="deliver">Delivered</button>
+  </div>
+
+  <script>
+    const orderid = localStorage.getItem("seletedorderid");
+    const alert = document.getElementById("responseMessage");
+
+    fetch(`http://localhost:8000/admin/orderdetails?orderid=${orderid}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data || data.Error) {
+          alert.innerHTML = `<h5>${data?.Error || "No Data"}</h5>`;
+          alert.style.color = 'red';
+          return;
+        }
+
+        const order = data[0];
+        document.getElementById("customerName").innerText = order.customer.name;
+        document.getElementById("customerAddress").innerText = order.customer.address;
+        document.getElementById("customerPhone").innerText = order.customer.phone;
+        document.getElementById("customerEmail").innerText = order.customer.email;
+
+        const productBox = document.getElementById("orderItemsBox");
+        productBox.innerHTML = "";
+
+        let total = 0;
+
+        order.items.forEach(item => {
+          const subtotal = item.price * item.quantity;
+          total += subtotal;
+
+          const card = document.createElement("div");
+          card.classList.add("image-box");
+          card.innerHTML = `
+            <img src="http://localhost:8000/photos/${item.image_path}" alt="${item.title}" class="product-image">
+            <p><strong>Title:</strong> ${item.title}</p>
+            <p><strong>Brand:</strong> ${item.brand || "N/A"}</p>
+            <p><strong>Qty:</strong> ${item.quantity}</p>
+            <p><strong>Price:</strong> Rs. ${item.price}</p>
+            <p><strong>Subtotal:</strong> Rs. ${subtotal}</p>
+          `;
+          productBox.appendChild(card);
+        });
+
+        const totalBox = document.createElement("div");
+        totalBox.classList.add("card-box");
+        totalBox.innerHTML = `
+          <h5>Order Total</h5>
+          <div class="row-line"><strong>Total Amount:</strong> Rs. ${total}</div>
+        `;
+        productBox.appendChild(totalBox);
+
+        document.getElementById("deliver").addEventListener("click", (e) => {
+          e.preventDefault();
+          const orderid = localStorage.getItem("seletedorderid");
+          fetch(`http://localhost:8000/admin/deliver`, {
+            method: "put",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderid })
+          })
+            .then(async res => {
+              const data = await res.json();
+              if (!res.ok) {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                alert.innerHTML = `<h5>${data.Error}</h5>`;
+                alert.style.color = 'red';
+                return;
+              }
+              return data;
+            })
+            .then(data => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              alert.innerHTML = `<h5>${data.message}</h5>`;
+              alert.style.color = 'green';
+            })
+            .catch(err => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              alert.innerHTML = `<h5>${err.message}</h5>`;
+              alert.style.color = 'red';
+            })
+        })
+
+        document.getElementById("ship").addEventListener("click", (e) => {
+          e.preventDefault();
+          const orderid = localStorage.getItem("seletedorderid");
+          fetch(`http://localhost:8000/admin/ship`, {
+            method: "put",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderid })
+          })
+            .then(async res => {
+              const data = await res.json();
+              if (!res.ok) {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                alert.innerHTML = `<h5>${data.Error}</h5>`;
+                alert.style.color = 'red';
+                return;
+              }
+              return data;
+            })
+            .then(data => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              alert.innerHTML = `<h5>${data.message}</h5>`;
+              alert.style.color = 'green';
+              window.location.href = "18_shippinglabel.html"
+            })
+            .catch(err => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              alert.innerHTML = `<h5>${err.message}</h5>`;
+              alert.style.color = 'red';
+            })
+          })
+      })
+  </script>
+</body>
+</html>

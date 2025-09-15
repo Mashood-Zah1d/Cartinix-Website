@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Slip</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #ffffff;
+      color: #111827;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .slip-container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h2 {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .order-details,
+    .customer-details {
+      margin-bottom: 20px;
+    }
+
+    .product-img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-right: 15px;
+    }
+
+    .detail-label {
+      font-weight: 500;
+      color: #555;
+    }
+
+    .detail-value {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .line {
+      height: 1px;
+      background: #ccc;
+      margin: 25px 0;
+    }
+
+    .thanks-msg {
+      text-align: center;
+      font-weight: 500;
+      color: #444;
+    }
+
+    button {
+      background: #111827;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: #333;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="slip-container">
+    <div class="header">
+      <h2>Order Confirmation</h2>
+      <p>Thank you for your purchase!</p>
+    </div>
+    <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
+    <h5><span class="detail-label">Order ID:</span> <span class="detail-value" id="orderid"> </span></h5>
+
+    <div class="customer-details">
+      <h5 class="mb-3">Customer Details</h5>
+      <p><span class="detail-label">Name:</span> <span class="detail-value" id="cust-name"></span></p>
+      <p><span class="detail-label">Email:</span> <span class="detail-value" id="cust-email"></span></p>
+      <p><span class="detail-label">Phone:</span> <span class="detail-value" id="cust-phone"></span></p>
+      <p><span class="detail-label">Address:</span> <span class="detail-value" id="cust-address"></span></p>
+    </div>
+
+    <div class="line"></div>
+
+    <div class="order-details" id="order-details-container">
+    </div>
+
+    <div class="line"></div>
+
+    <div class="thanks-msg">
+      <p>Your order has been placed successfully. We’ll contact you soon!</p>
+    </div>
+  </div>
+
+  <script>
+    const alert = document.getElementById("responseMessage");
+    document.addEventListener("DOMContentLoaded", () => {
+      const orderId = localStorage.getItem("OrderId");
+
+      if (!orderId) {
+        alert.innerHTML = `<p>No Order ID found.</p>`
+        alert.style.color = 'red';
+        return;
+      }
+
+      fetch(`http://localhost:8000/users/orderslip?orderid=${orderId}`)
+        .then(async res => {
+          if (!res.ok) {
+            const text = await res.json();
+            alert.innerHTML = `<h5>Error fetching order data.</h5>`
+            alert.style.color = 'red';
+            return;
+          }
+          return res.json();
+        })
+        .then(data => {
+          document.getElementById("orderid").innerText = data[0].order_id;
+          document.getElementById("cust-name").innerText = data[0].customer_name;
+          document.getElementById("cust-email").innerText = data[0].customer_email;
+          document.getElementById("cust-phone").innerText = data[0].customer_phone;
+          document.getElementById("cust-address").innerText = data[0].customer_address;
+
+          const container = document.getElementById("order-details-container");
+
+          data.forEach(product => {
+            const div = document.createElement("div");
+            div.className = "d-flex align-items-start mb-3";
+
+            div.innerHTML = `
+            <img src="http://localhost:8000/photos/${product.image_path}" class="product-img" alt="Product Image">
+            <div>
+              <p><span class="detail-label">Product:</span> <span class="detail-value">${product.title}</span></p>
+              <p><span class="detail-label">Color:</span> <span class="detail-value">${product.color}</span></p>
+              <p><span class="detail-label">Quantity:</span> <span class="detail-value">${product.quantity}</span></p>
+              <p><span class="detail-label">Payment:</span> <span class="detail-value">${product.payment_method}</span></p>
+            </div>
+          `;
+            container.appendChild(div);
+          });
+        })
+        .catch(err => {
+          alert.innerHTML = `<h5>Could not load order details.</h5>`
+          alert.style.color = 'red';
+        });
+    });
+  </script>
+
+</body>
+
+</html>
