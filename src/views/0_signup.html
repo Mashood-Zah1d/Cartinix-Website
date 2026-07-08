@@ -1,211 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Signup</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Cartinix | Sign Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.16);
+      --gold: #c9a96e;
+      --gold-l: #e2c99a;
+      --text: #ede9e0;
+      --muted: #7a7268;
+      --subtle: #3f3b35;
+      --danger: #e05555;
+      --success: #4caf7d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: "Inter", sans-serif;
-      background: #ffffff;
-      color: #111827;
-      margin: 0;
-      padding: 0;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    .signup-container {
-      width: 100%;
-      max-width: 450px;
-      background: #ffffff;
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      border: 1px solid #e5e7eb;
-      margin: 40px auto;
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
     }
 
-    .navbar {
-      background: #ffffff;
-      height: 70px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      padding: 0.6rem 1rem;
-      border-bottom: 1px solid #e5e7eb;
+    .left-panel {
+      position: relative;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 3rem;
+    }
+    .left-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg') center/cover no-repeat;
+    }
+    .left-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.5) 50%, rgba(8,8,8,0.2) 100%);
+    }
+    .left-content { position: relative; z-index: 1; }
+    .left-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+      position: absolute; top: 2.5rem; left: 3rem; z-index: 1;
+    }
+    .left-brand img {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .left-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
+    }
+    .left-tag {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.65rem; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .left-tag::before {
+      content: ''; width: 22px; height: 1px; background: var(--gold); opacity: 0.6;
+    }
+    .left-panel h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem; font-weight: 700;
+      color: var(--text); line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 14px;
+    }
+    .left-panel h2 em { font-style: italic; color: var(--gold); }
+    .left-panel p {
+      font-size: 0.83rem; color: var(--muted);
+      line-height: 1.85; max-width: 300px;
+      font-weight: 300;
     }
 
-    .navbar .nav-link {
-      color: #111827 !important;
-      font-weight: 500;
-      margin-left: 10px;
-      padding: 6px 12px;
-      transition: all 0.3s ease;
-      border-radius: 8px;
+    .right-panel {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2.5rem;
+    }
+    .form-box {
+      width: 100%; max-width: 400px;
     }
 
-    .navbar .nav-link.active {
-      background: #f3f4f6;
-      color: #000000 !important;
+    .form-brand {
+      display: none;
+      align-items: center; gap: 10px;
+      text-decoration: none;
+      margin-bottom: 2.5rem;
+    }
+    .form-brand img {
+      width: 32px; height: 32px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .form-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
     }
 
-    .navbar .nav-link:hover {
-      background: #111827;
-      color: #ffffff !important;
-      transform: translateY(-1px);
+    .form-eyebrow {
+      font-size: 0.65rem; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
     }
-
-    .logo {
-      height: 65px;
+    .form-eyebrow::before {
+      content: ''; width: 20px; height: 1px; background: var(--gold); opacity: 0.5;
     }
 
     .form-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 25px;
-      color: #111827;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; font-weight: 700;
+      color: var(--text); letter-spacing: -0.02em;
+      margin-bottom: 2rem; line-height: 1.1;
     }
 
-    label {
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 6px;
+    .field { margin-bottom: 1.25rem; }
+
+    .field label {
       display: block;
-      color: #374151;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px; font-weight: 400;
     }
 
-    .form-control {
+    .field input {
       width: 100%;
-      padding: 12px 14px;
-      font-size: 1rem;
+      background: var(--surface2);
+      border: 1px solid var(--border-h);
       border-radius: 8px;
-      border: 1px solid #d1d5db;
-      margin-bottom: 16px;
-      transition: all 0.3s ease;
-    }
-
-    .form-control:focus {
-      border-color: #111827;
-      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.1);
+      padding: 13px 16px;
+      font-size: 0.92rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.25s;
       outline: none;
+      appearance: none;
+      -webkit-appearance: none;
     }
 
-    .form-control::placeholder {
-      color: #9ca3af;
+    .field input::placeholder { color: var(--subtle); }
+
+    .field input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+      background: #1c1c1c;
     }
 
-    .btn-submit {
+    .btn-primary {
       width: 100%;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      background: #111827;
-      color: #ffffff;
-      transition: all 0.3s ease;
+      background: var(--gold);
+      color: #080808;
+      border: none; border-radius: 6px;
+      padding: 14px;
+      font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: all 0.3s;
+      margin-top: 0.5rem;
+    }
+    .btn-primary:hover {
+      background: var(--gold-l);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(201,169,110,0.2);
+    }
+    .btn-primary:disabled {
+      opacity: 0.6; cursor: not-allowed;
+      transform: none; box-shadow: none;
     }
 
-    .btn-submit:hover {
-      background: #000000;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    #responseMessage {
+      min-height: 24px;
+      font-size: 0.82rem;
+      text-align: center;
+      margin: 1rem 0 0.25rem;
+      border-radius: 6px;
+      padding: 0 4px;
+      transition: all 0.3s;
+    }
+    #responseMessage.success { color: var(--success); }
+    #responseMessage.error   { color: var(--danger); }
+
+    .signin-hint {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .signin-hint a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .signin-hint a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .page-wrap { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .right-panel { border-left: none; padding: 2rem 1.5rem; }
+      .form-brand { display: flex; }
     }
   </style>
 </head>
-
 <body>
 
-  <nav class="navbar navbar-expand-lg shadow-sm">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="2_homepage.html">
-        <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix Logo" class="logo me-2" />
-        <span class="fw-bold">Cartinix</span>
+  <div class="page-wrap">
+
+    <div class="left-panel">
+      <div class="left-bg"></div>
+      <a class="left-brand" href="2_homepage.html">
+        <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+        <span class="left-brand-name">Cartinix</span>
       </a>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-          <li class="nav-item"><a class="nav-link active" href="2_homepage.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="3_Allproducts.html">Shop</a></li>
-          <li class="nav-item"><a class="nav-link" href="10_about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="9_myorders.html">My Orders</a></li>
-          <li class="nav-item"><a class="nav-link" href="1_Signin.html">Login/Signup</a></li>
-          <li class="nav-item"><a class="nav-link" id="logout">Logout</a></li>
-          <li class="nav-item">
-            <a class="nav-link position-relative" href="7_showcart.html">
-              <i class="fas fa-shopping-cart"></i>
-            </a>
-          </li>
-        </ul>
+      <div class="left-content">
+        <div class="left-tag">Join Cartinix</div>
+        <h2>Wear time<br>with<br><em>intention</em></h2>
+        <p>Create your account and unlock access to our curated collection of luxury timepieces crafted for those who value precision.</p>
       </div>
     </div>
-  </nav>
 
-  <div class="signup-container">
-    <div class="form-title">SIGN-UP FORM</div>
-    <form id="adminSignupForm">
-      <div class="mb-3">
-        <label for="name" class="form-label">Full Name</label>
-        <input type="text" class="form-control" name="name" id="name" required autocomplete="name" />
+    <div class="right-panel">
+      <div class="form-box">
+        <a class="form-brand" href="2_homepage.html">
+          <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+          <span class="form-brand-name">Cartinix</span>
+        </a>
+
+        <div class="form-eyebrow">New Account</div>
+        <div class="form-title">Sign Up</div>
+
+        <form id="signupForm" autocomplete="off">
+          <div class="field">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="John Doe" required autocomplete="name" />
+          </div>
+
+          <div class="field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="••••••••" required minlength="6" autocomplete="new-password" />
+          </div>
+
+          <div id="responseMessage"></div>
+
+          <button type="submit" class="btn-primary" id="submitBtn">Create Account</button>
+        </form>
+
+        <p class="signin-hint">Already have an account? <a href="1_Signin.html">Sign in</a></p>
       </div>
+    </div>
 
-      <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
-        <input type="email" class="form-control" name="email" id="email" required autocomplete="email" />
-      </div>
-
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" name="password" id="password"
-          required autocomplete="new-password" />
-      </div>
-
-      <div class="mb-3">
-        <label for="role" class="form-label">Select Role</label>
-        <select class="form-select" id="role" required>
-          <option value="" disabled selected>Select your role</option>
-          <option value="customer">Customer</option>
-        </select>
-      </div>
-
-      <button type="submit" class="btn-submit">Create Account</button>
-    </form>
-    <div id="responseMessage" class="mt-3 text-center fw-bold"></div>
   </div>
 
   <script>
-    const form = document.getElementById("adminSignupForm");
-    const alert = document.getElementById("responseMessage");
+    const form = document.getElementById("signupForm");
+    const msg = document.getElementById("responseMessage");
+    const submitBtn = document.getElementById("submitBtn");
+
+    function showMsg(text, type) {
+      msg.textContent = text;
+      msg.className = type;
+    }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const name = document.getElementById("name").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const role = document.getElementById("role").value;
 
-      fetch(`http://localhost:8000/users/customerSignup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      })
-        .then(res => res.json())
-        .then(data => {
-          alert.innerHTML = `<p>${data.message}<p>`;
-          alert.style.color = "green";
-          setTimeout(() => {
-            window.location.href = '1_Signin.html';
-          }, 1000);
-        })
-        .catch(err => {
-          alert.innerHTML = `<h5>${err.Error}</h5>`;
-          alert.style.color = "red";
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!name || !email || !password) {
+        showMsg("Please fill in all fields.", "error");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Creating Account...";
+
+      try {
+        const res = await fetch("http://localhost:8000/users/customerSignup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password, role: "customer" }),
         });
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) throw new Error(data.error || data.message || "Sign up failed. Please try again.");
+
+        showMsg(data.message || "Account created successfully.", "success");
+        setTimeout(() => window.location.href = "1_Signin.html", 1000);
+      } catch (err) {
+        showMsg(err.message, "error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create Account";
+      }
     });
   </script>
 </body>

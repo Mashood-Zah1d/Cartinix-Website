@@ -1,359 +1,575 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product Details</title>
+  <title>Cartinix | Product Details</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display&display=swap"
-    rel="stylesheet">
   <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.16);
+      --gold: #c9a96e;
+      --gold-l: #e2c99a;
+      --text: #ede9e0;
+      --muted: #7a7268;
+      --subtle: #3f3b35;
+      --danger: #e05555;
+      --success: #4caf7d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background: #ffffff;
-      font-family: 'Inter', sans-serif;
-      color: #111827;
-    }
-     
-    .card {
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      padding: 20px;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    h2.text-center {
-      color: #111827;
-      font-weight: 700;
+    /* NAV */
+    .nav {
+      height: 66px;
+      display: flex; align-items: center;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-inner {
+      width: 100%; max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-brand img {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .nav-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 2px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 7px 14px; border-radius: 6px; transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-right {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .nav-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 7px 14px; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; border: none;
+    }
+    .nav-btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-h);
+      color: var(--muted);
+    }
+    .nav-btn-outline:hover { color: var(--text); border-color: var(--muted); }
+    .nav-btn-gold { background: var(--gold); color: #080808; font-weight: 500; }
+    .nav-btn-gold:hover { background: var(--gold-l); }
+    .nav-cart {
+      color: var(--muted); font-size: 0.95rem;
+      padding: 7px 14px; border-radius: 6px;
+      transition: all 0.2s; cursor: pointer; text-decoration: none;
+    }
+    .nav-cart:hover { color: var(--text); background: var(--surface2); }
+    .nav-toggler {
+      display: none; background: none;
+      border: 1px solid var(--border); color: var(--text);
+      padding: 6px 10px; border-radius: 6px; cursor: pointer;
     }
 
-    .carousel-item img {
-      border-radius: 12px;
-      max-height: 500px;
-      object-fit: cover;
-      width: 100%;
-      border: 1px solid #e5e7eb;
+    /* PAGE LAYOUT */
+    .page-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 2rem 80px;
     }
 
-    #productDescription {
-      font-size: 1.05rem;
-      font-weight: 400;
-      color: #374151;
-      margin-bottom: 20px;
-      line-height: 1.6;
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .page-eyebrow::before {
+      content: ''; width: 22px; height: 1px; background: var(--gold); opacity: 0.5;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text); line-height: 1.1;
+      margin-bottom: 48px;
+    }
+    .page-title em { font-style: italic; color: var(--gold); }
+
+    /* PRODUCT GRID */
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
     }
 
-    .product-info-list {
-      list-style: none;
-      padding: 0;
+    /* LEFT: IMAGE SECTION */
+    .img-section {
+      display: flex;
+      gap: 14px;
     }
-
-    .product-info-list li {
-      color: #111827;
-      font-size: 1.1rem;
-      font-weight: 500;
-      margin-bottom: 10px;
-      padding: 8px 0;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    #price {
-      color: #111827;
-      font-weight: 800;
-      font-size: 1.8rem;
-      margin-top: 30px;
-      margin-bottom: 30px;
-      text-align: left;
-    }
-
-    .custom-btn {
-      background: #111827;
-      color: #ffffff;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-      margin-right: 10px;
-      cursor: pointer;
-    }
-
-    .custom-btn:hover {
-      background: #000000;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-    }
-
-    .custom-btn.secondary {
-      background: #ef4444;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-    }
-
-    .custom-btn.secondary:hover {
-      background: #dc2626;
-      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.4);
-    }
-
-    .product-title {
-      color: #111827;
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 25px;
-      text-align: center;
-    }
-
-    .thumbnail-container {
+    .thumbnails {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-right: 20px;
+      gap: 10px;
+      flex-shrink: 0;
     }
-
-    .thumbnail-container img {
-      width: 80px;
-      height: 80px;
+    .thumb {
+      width: 72px; height: 72px;
       object-fit: cover;
       border-radius: 8px;
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--border-h);
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.25s;
+      opacity: 0.6;
+    }
+    .thumb:hover, .thumb.active { opacity: 1; border-color: var(--gold); }
+
+    .main-img-wrap {
+      flex: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      aspect-ratio: 4/5;
+      position: relative;
+    }
+    .main-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      display: block;
+    }
+    .main-img-wrap:hover .main-img { transform: scale(1.03); }
+
+    /* RIGHT: DETAILS SECTION */
+    .detail-section {}
+
+    .product-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text); line-height: 1.1;
+      margin-bottom: 6px;
     }
 
-    .thumbnail-container img:hover {
-      border-color: #111827;
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    .product-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 28px;
     }
 
-    .carousel-wrapper {
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+    .spec-list {
+      list-style: none;
       display: flex;
-      gap: 20px;
+      flex-direction: column;
+      gap: 0;
+    }
+    .spec-list li {
+      display: flex; justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+    .spec-list li .spec-label {
+      color: var(--muted);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      font-size: 0.72rem;
+    }
+    .spec-list li .spec-value {
+      color: var(--text);
+      font-weight: 400;
+      text-align: right;
     }
 
-    .color-options {
-      margin-top: 25px;
+    .desc-block {
+      margin: 24px 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.9;
+      font-weight: 300;
     }
 
-    .color-options button {
-      min-width: 120px;
-      height: 44px;
-      background-color: #f3f4f6;
-      border-radius: 8px;
-      margin-top: 10px;
-      margin-right: 12px;
-      border: 1px solid #d1d5db;
-      cursor: pointer;
-      transition: all 0.3s ease;
+    /* COLOR OPTIONS */
+    .color-section { margin: 24px 0; }
+    .color-label {
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 12px;
     }
-
-    .color-options button:hover {
-      transform: scale(1.05);
-      border-color: #111827;
-      background-color: #e5e7eb;
+    .color-pills {
+      display: flex; flex-wrap: wrap; gap: 8px;
     }
-
-    .color-options button.selected-color {
-      border-color: #111827;
-      background-color: #111827;
-      color: white;
+    .color-pill {
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: 1px solid var(--border-h);
+      background: transparent;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.25s;
     }
+    .color-pill:hover { border-color: var(--gold); color: var(--gold); }
+    .color-pill.selected { border-color: var(--gold); background: var(--gold); color: #080808; }
 
-    h2.stylish-heading,
-    h4.stylish-heading {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
+    /* ACTION BUTTONS */
+    .action-row {
+      display: flex; gap: 12px; margin-top: 32px;
+    }
+    .btn-primary {
+      flex: 1;
+      background: var(--gold);
+      color: #080808;
+      border: none; border-radius: 6px;
+      padding: 14px;
+      font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .btn-primary:hover { background: var(--gold-l); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-secondary {
+      flex: 1;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border-h);
+      border-radius: 6px;
+      padding: 14px;
+      font-size: 0.82rem; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .btn-secondary:hover { color: var(--text); border-color: var(--muted); }
+    .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* RESPONSE MSG */
+    #responseMessage {
+      margin-top: 16px;
+      font-size: 0.82rem;
       text-align: center;
-      margin-top: 30px;
-      color: #111827;
+      min-height: 20px;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+    #responseMessage.success { color: var(--success); }
+    #responseMessage.error   { color: var(--danger); }
+
+    /* SKELETON */
+    .skeleton-block {
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .skeleton-line {
+      height: 14px; border-radius: 4px;
+      background: var(--surface2); margin-bottom: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .product-grid { grid-template-columns: 1fr; gap: 36px; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-right { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: fixed; inset: 66px 0 0 0;
+        background: rgba(8,8,8,0.98);
+        padding: 2rem; z-index: 199; gap: 6px;
+      }
+      .nav-links.open a { font-size: 1rem; padding: 12px 16px; }
+      .nav-right.open {
+        display: flex; flex-direction: column;
+        position: fixed; top: 66px; left: 0; right: 0;
+        padding: 0 2rem 2rem;
+        background: rgba(8,8,8,0.98);
+        z-index: 198; gap: 10px;
+      }
+      .nav-toggler { display: flex; }
+    }
+    @media (max-width: 600px) {
+      .img-section { flex-direction: column-reverse; }
+      .thumbnails { flex-direction: row; }
+      .thumb { width: 56px; height: 56px; }
+      .action-row { flex-direction: column; }
     }
   </style>
-
 </head>
-
 <body>
-  <div class="container py-5">
-    <h2 class="text-center mb-4 stylish-heading">Product Details</h2>
-    <div class="card p-4">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="carousel-wrapper">
-            <div class="thumbnail-container" id="thumbnailContainer">
 
-            </div>
-            <div id="carouselExample" class="carousel slide" data-bs-ride="false" style="flex: 1;">
-              <div class="carousel-inner" id="imageCarousel">
-              </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-              </button>
-            </div>
-          </div>
-        </div>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="2_homepage.html">
+        <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+        <span class="nav-brand-name">Cartinix</span>
+      </a>
 
-        <div class="col-md-6">
-          <h4 id="productTitle" class="product-title  stylish-heading">Product Name</h4>
-          <h3 id="price"></h3>
-          <ul class="product-info-list">
-            <li id="brand">Brand:</li>
-            <li id="category">Category:</li>
-            <li id="material">Material:</li>
-            <li id="movement_type">Movement Type:</li>
-          </ul>
-          <p id="productDescription"></p>
+      <button class="nav-toggler" id="navToggler" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
 
-          <div class="color-options" id="colorOptions">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="2_homepage.html">Home</a></li>
+        <li><a href="3_Allproducts.html">Shop</a></li>
+        <li><a href="10_about.html">About</a></li>
+        <li id="myOrdersLink" style="display:none;"><a href="9_myorders.html">My Orders</a></li>
+      </ul>
 
-          </div>
-
-          <div class="d-flex flex-wrap justify-content-center mt-4">
-            <button class="custom-btn" id="addtocart">Add to Cart</button>
-            <button class="custom-btn secondary" id="buynow">Buy Now</button>
-          </div>
-
-        </div>
-      </div>
-      <div id="responseMessage" class="text-center mb-3 fw-semibold mt-4"></div>
+      <div class="nav-right" id="navAuth"></div>
     </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="page-eyebrow">Timepiece Detail</div>
+    <div class="page-title">The <em>craft</em> behind<br>every second</div>
+
+    <div class="product-grid" id="productGrid">
+      <div class="skeleton-block" style="aspect-ratio:4/5;"></div>
+      <div>
+        <div class="skeleton-line" style="width:70%;height:28px;margin-bottom:16px;background:var(--surface);border-radius:6px;"></div>
+        <div class="skeleton-line" style="width:40%;height:20px;background:var(--surface);border-radius:6px;"></div>
+      </div>
+    </div>
+
+    <div id="responseMessage"></div>
   </div>
 
   <script>
-    const productid = localStorage.getItem("productid");
-    const coloroption = document.getElementById("colorOptions");
-    const alert = document.getElementById("responseMessage");
-    fetch(`http://localhost:8000/users/product-details?productid=${productid}`)
-      .then(async res => {
-        if (!res.ok) {
-          const text = await res.json();
-          alert.innerHTML = `<h4>${text.Error}</h4>`;
-          alert.style.color = "red";
-          setTimeout(() => {
-            alert.innerHTML = '';
-          }, 1500);
-          return;
-        }
-        return res.json();
-      })
-      .then(data => {
-        document.getElementById("productTitle").innerText = "Name: " + data.details.title;
-        document.getElementById("price").innerText = "Price: " + data.details.price + " /-rs";
-        document.getElementById("brand").innerText = "Brand: " + data.details.brand;
-        document.getElementById("category").innerText = "Category: " + data.details.category;
-        document.getElementById("material").innerText = "Material: " + data.details.material;
-        document.getElementById("movement_type").innerText = "Stock: " + data.details.stock;
-        document.getElementById("productDescription").innerText = data.details.description;
-
-        const carousel = document.getElementById("imageCarousel");
-
-        data.images.forEach((img, index) => {
-          const div = document.createElement("div");
-          div.className = "carousel-item" + (index === 0 ? " active" : "");
-          div.innerHTML = `<img src="http://localhost:8000/photos/${img.image_path}" class="d-block w-100" alt="Product Image">`;
-          carousel.appendChild(div);
-
-
-          const thumb = document.createElement("img");
-          thumb.src = `http://localhost:8000/photos/${img.image_path}`;
-          thumb.onclick = () => {
-            const carouselItems = document.querySelectorAll(".carousel-item");
-            carouselItems.forEach(item => item.classList.remove("active"));
-            carouselItems[index].classList.add("active");
-          };
-          document.getElementById("thumbnailContainer").appendChild(thumb);
-        })
-        data.color.forEach((color, index) => {
-          const btn = document.createElement("button");
-          btn.title = color.color_name;
-          btn.innerText = color.color_name;
-
-          btn.onclick = () => {
-            localStorage.setItem("color", btn.innerText);
-            document.querySelectorAll(".color-options button").forEach(button => {
-              button.classList.remove("selected-color");
-            });
-
-            btn.classList.add("selected-color");
-            const carouselItems = document.querySelectorAll(".carousel-item");
-            carouselItems.forEach(item => item.classList.remove("active"));
-            carouselItems[index].classList.add("active");
-          };
-
-          coloroption.appendChild(btn);
-        });
-      });
-
-    document.getElementById("buynow").addEventListener("click", (e) => {
-      e.preventDefault();
-
-      const product_sku = localStorage.getItem("productid");
-      const color = localStorage.getItem("color");
-      const customer_email = localStorage.getItem("customerEmail");
-      if (!product_sku || !color || !customer_email) {
-        alert.innerHTML = `<h4>Missing product info or login.</h4>`;
-        alert.style.color = "red";
-        setTimeout(() => {
-          alert.innerHTML = '';
-        }, 1500);
-        return;
-      }
-      window.location.href = "5_buynow.html"
-
-    })
-
-    document.getElementById("addtocart").addEventListener("click", (e) => {
-      e.preventDefault();
-      const product_sku = localStorage.getItem("productid");
-      const color = localStorage.getItem("color");
-      const customer_email = localStorage.getItem("customerEmail");
-      if (!product_sku || !color || !customer_email) {
-        alert.innerHTML = `<h4>Missing product info or login.</h4>`;
-        alert.style.color = "red";
-        setTimeout(() => {
-          alert.innerHTML = '';
-        }, 1500);
-        return;
-      }
-
-      fetch("http://localhost:8000/users/addtocart", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          product_sku,
-          color,
-          customer_email,
-        }),
-      })
-        .then(data => {
-          localStorage.removeItem("color");
-          alert.innerHTML = `<h4>Product Added To Cart</h4>`;
-          alert.style.color = "green";
-          setTimeout(() => {
-            alert.innerHTML = '';
-          }, 1000);
-        })
-        .catch(err => {
-          alert.innerHTML = `<h4>Network error. Try again.</h4>`;
-          alert.style.color = "red";
-
-          setTimeout(() => {
-            alert.innerHTML = '';
-          }, 1000);
-        })
+    // ── Shared auth check (same logic used across all pages) ──
+    function isUserLoggedIn() {
+      return !!(
+        localStorage.getItem("token") ||
+        localStorage.getItem("customerEmail") ||
+        localStorage.getItem("adminEmail")
+      );
     }
-    )
+
+    function renderNavAuth() {
+      const navAuth = document.getElementById("navAuth");
+      const myOrdersLink = document.getElementById("myOrdersLink");
+      const loggedIn = isUserLoggedIn();
+
+      myOrdersLink.style.display = loggedIn ? "" : "none";
+
+      if (loggedIn) {
+        navAuth.innerHTML = `
+          <a class="nav-cart" href="7_showcart.html" aria-label="Cart"><i class="fas fa-shopping-cart"></i></a>
+          <button class="nav-btn nav-btn-outline" id="logoutBtn">Logout</button>
+        `;
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+          localStorage.clear();
+          window.location.href = "1_Signin.html";
+        });
+      } else {
+        navAuth.innerHTML = `
+          <a class="nav-cart" href="7_showcart.html" aria-label="Cart"><i class="fas fa-shopping-cart"></i></a>
+          <a href="1_Signin.html" class="nav-btn nav-btn-outline">Login</a>
+          <a href="0_signup.html" class="nav-btn nav-btn-gold">Sign Up</a>
+        `;
+      }
+    }
+
+    function initMobileNav() {
+      const navToggler = document.getElementById("navToggler");
+      const navLinks = document.getElementById("navLinks");
+      const navAuth = document.getElementById("navAuth");
+      navToggler.addEventListener("click", () => {
+        navLinks.classList.toggle("open");
+        navAuth.classList.toggle("open");
+      });
+    }
+
+    renderNavAuth();
+    initMobileNav();
+
+    // ── Product details ──
+    const productid = localStorage.getItem("productid");
+    const msgEl = document.getElementById("responseMessage");
+    const grid = document.getElementById("productGrid");
+
+    let currentImages = [];
+    let msgTimer = null;
+
+    function showMsg(text, type) {
+      clearTimeout(msgTimer);
+      msgEl.textContent = text;
+      msgEl.className = type;
+      msgTimer = setTimeout(() => { msgEl.textContent = ""; msgEl.className = ""; }, 2000);
+    }
+
+    if (!productid) {
+      grid.innerHTML = "";
+      showMsg("No product selected. Please choose a watch from the shop.", "error");
+    } else {
+      fetch(`http://localhost:8000/users/product-details?productid=${encodeURIComponent(productid)}`)
+        .then(async res => {
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            showMsg(err.Error || "Failed to load product.", "error");
+            grid.innerHTML = "";
+            return;
+          }
+          return res.json();
+        })
+        .then(data => {
+          if (!data) return;
+          const d = data.details;
+          currentImages = data.images || [];
+
+          grid.innerHTML = `
+            <div class="img-section">
+              <div class="thumbnails" id="thumbnails"></div>
+              <div class="main-img-wrap">
+                <img class="main-img" id="mainImg" src="http://localhost:8000/photos/${currentImages[0]?.image_path}" alt="${d.title}" />
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <div class="product-name">${d.title}</div>
+              <div class="product-price">Rs ${Number(d.price).toLocaleString()}</div>
+
+              <div class="divider"></div>
+
+              <ul class="spec-list">
+                <li><span class="spec-label">Brand</span><span class="spec-value">${d.brand}</span></li>
+                <li><span class="spec-label">Category</span><span class="spec-value">${d.category}</span></li>
+                <li><span class="spec-label">Material</span><span class="spec-value">${d.material}</span></li>
+                <li><span class="spec-label">Stock</span><span class="spec-value">${d.stock} units</span></li>
+              </ul>
+
+              <div class="divider"></div>
+
+              <p class="desc-block">${d.description}</p>
+
+              <div class="color-section">
+                <div class="color-label">Select Color</div>
+                <div class="color-pills" id="colorPills"></div>
+              </div>
+
+              <div class="action-row">
+                <button class="btn-primary" id="addtocart">Add to Cart</button>
+                <button class="btn-secondary" id="buynow">Buy Now</button>
+              </div>
+            </div>
+          `;
+
+          // Clear any stale color selection from a previous product view
+          localStorage.removeItem("color");
+
+          const mainImg = document.getElementById("mainImg");
+          const thumbsEl = document.getElementById("thumbnails");
+
+          currentImages.forEach((img, i) => {
+            const thumb = document.createElement("img");
+            thumb.className = "thumb" + (i === 0 ? " active" : "");
+            thumb.src = `http://localhost:8000/photos/${img.image_path}`;
+            thumb.alt = d.title;
+            thumb.addEventListener("click", () => {
+              mainImg.src = `http://localhost:8000/photos/${img.image_path}`;
+              document.querySelectorAll(".thumb").forEach(t => t.classList.remove("active"));
+              thumb.classList.add("active");
+            });
+            thumbsEl.appendChild(thumb);
+          });
+
+          const colorPills = document.getElementById("colorPills");
+          (data.color || []).forEach((c, i) => {
+            const pill = document.createElement("button");
+            pill.className = "color-pill";
+            pill.textContent = c.color_name;
+            pill.addEventListener("click", () => {
+              localStorage.setItem("color", c.color_name);
+              document.querySelectorAll(".color-pill").forEach(p => p.classList.remove("selected"));
+              pill.classList.add("selected");
+              if (currentImages[i]) {
+                mainImg.src = `http://localhost:8000/photos/${currentImages[i].image_path}`;
+                document.querySelectorAll(".thumb").forEach((t, ti) => {
+                  t.classList.toggle("active", ti === i);
+                });
+              }
+            });
+            colorPills.appendChild(pill);
+          });
+
+          function validateSelection() {
+            const color = localStorage.getItem("color");
+            if (!color) {
+              showMsg("Please select a color first.", "error");
+              return false;
+            }
+            if (!isUserLoggedIn()) {
+              showMsg("Please log in to continue.", "error");
+              return false;
+            }
+            return true;
+          }
+
+          document.getElementById("addtocart").addEventListener("click", (e) => {
+            if (!validateSelection()) return;
+            const btn = e.currentTarget;
+            const product_sku = productid;
+            const color = localStorage.getItem("color");
+            const customer_email = localStorage.getItem("customerEmail");
+
+            btn.disabled = true;
+            fetch("http://localhost:8000/users/addtocart", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ product_sku, color, customer_email }),
+            })
+              .then(() => {
+                localStorage.removeItem("color");
+                document.querySelectorAll(".color-pill").forEach(p => p.classList.remove("selected"));
+                showMsg("Added to cart successfully.", "success");
+              })
+              .catch(() => showMsg("Network error. Please try again.", "error"))
+              .finally(() => { btn.disabled = false; });
+          });
+
+          document.getElementById("buynow").addEventListener("click", () => {
+            if (!validateSelection()) return;
+            window.location.href = "5_buynow.html";
+          });
+        })
+        .catch(() => {
+          grid.innerHTML = "";
+          showMsg("Failed to load product details.", "error");
+        });
+    }
   </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

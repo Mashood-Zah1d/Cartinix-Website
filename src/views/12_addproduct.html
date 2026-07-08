@@ -1,336 +1,433 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add Product</title>
-
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Cartinix | Add Product</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.16);
+      --gold: #c9a96e;
+      --gold-l: #e2c99a;
+      --text: #ede9e0;
+      --muted: #7a7268;
+      --subtle: #3f3b35;
+      --danger: #e05555;
+      --success: #4caf7d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background: #f9fafb;
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 40px 0;
-      color: #111827;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
     }
 
-    .form-container {
-      width: 100%;
-      max-width: 750px;
-      background: #ffffff;
-      padding: 40px 35px;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-      margin: auto;
-      border: 1px solid #e5e7eb;
-      position: relative;
+    /* ── HEADER ── */
+    .dash-header {
+      height: 66px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.5rem, 4vw, 2.5rem);
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .dash-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .dash-brand img {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .dash-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
+    }
+    .dash-brand-tag {
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); margin-left: 8px;
+      padding: 3px 10px; border: 1px solid var(--border-h); border-radius: 20px;
+    }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .admin-email { font-size: 0.78rem; color: var(--muted); display: none; }
+    .nav-btn-outline {
+      background: transparent; border: 1px solid var(--border-h); color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 8px 16px; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .nav-btn-outline:hover { color: var(--text); border-color: var(--muted); }
+    .sidebar-toggler {
+      display: none; background: none;
+      border: 1px solid var(--border); color: var(--text);
+      padding: 6px 10px; border-radius: 6px; cursor: pointer;
     }
 
-    .form-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
-      border-radius: 16px 16px 0 0;
-    }
+    /* ── LAYOUT ── */
+    .dashboard { display: flex; min-height: calc(100vh - 66px); }
 
-    /* Title */
-    h2.form-title {
-      font-weight: 700;
-      font-size: 28px;
-      margin-bottom: 30px;
-      text-align: center;
-      color: #111827;
+    .sidebar {
+      width: 240px; flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 14px;
     }
-
-    /* Labels */
-    label {
-      font-weight: 600;
-      color: #374151;
-      margin-bottom: 8px;
-      display: inline-block;
-      font-size: 0.9rem;
-    }
-
-    /* Inputs */
-    .form-control {
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      font-size: 15px;
-      padding: 12px 16px;
-      transition: all 0.3s ease;
-      background: #ffffff;
-      color: #111827;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .form-control:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-      outline: none;
-    }
-
-    .form-control::placeholder {
-      color: #9ca3af;
-    }
-
-    textarea.form-control {
-      resize: vertical;
-      min-height: 120px;
-    }
-
-    /* File Input */
-    input[type="file"].form-control {
-      padding: 12px 16px;
-      border: 2px dashed #d1d5db;
-      background: #f9fafb;
-      color: #374151;
-    }
-
-    input[type="file"].form-control:hover {
-      border-color: #2563eb;
-    }
-
-    input[type="file"].form-control::file-selector-button {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      margin-right: 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.85rem;
-    }
-
-    input[type="file"].form-control::file-selector-button:hover {
-      background: #1d4ed8;
-    }
-
-    /* Buttons */
-    .btn-gradient {
-      background: #2563eb;
-      color: white;
-      font-weight: 600;
-      font-size: 16px;
-      padding: 14px 28px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 3px 12px rgba(37, 99, 235, 0.25);
-    }
-
-    .btn-gradient:hover {
-      background: #1d4ed8;
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      background: #f3f4f6;
-      color: #374151;
-      font-weight: 600;
-      border: 1px solid #d1d5db;
+    .sidebar a {
+      display: flex; align-items: center; gap: 10px;
+      color: var(--muted); text-decoration: none;
+      padding: 11px 16px; margin-bottom: 4px;
       border-radius: 8px;
-      padding: 12px 20px;
-      transition: all 0.3s ease;
-      cursor: pointer;
+      font-size: 0.85rem; font-weight: 400;
+      transition: all 0.2s;
+    }
+    .sidebar a i { width: 16px; text-align: center; font-size: 0.85rem; }
+    .sidebar a:hover { background: var(--surface2); color: var(--text); }
+    .sidebar a.active {
+      background: rgba(201,169,110,0.1);
+      color: var(--gold);
+      border: 1px solid rgba(201,169,110,0.25);
     }
 
-    .btn-secondary:hover {
-      background: #e5e7eb;
-      border-color: #9ca3af;
+    .main-content { flex: 1; padding: 40px clamp(1.5rem, 4vw, 3rem); }
+
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+    }
+    .page-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--gold); opacity: 0.5; }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700; color: var(--text);
+      margin-bottom: 36px;
     }
 
-    /* Sections */
-    .color-section {
-      background: #f9fafb;
-      padding: 20px 25px;
-      border: 1px solid #e5e7eb;
+    /* ── FORM ── */
+    .form-container {
+      max-width: 760px;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .color-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: #2563eb;
-      border-radius: 12px 12px 0 0;
-    }
-
-    /* Layout */
-    .form-group {
-      margin-bottom: 20px;
+      padding: 32px clamp(1.25rem, 3vw, 2.5rem);
     }
 
     .form-row {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 20px;
     }
-
-    .form-row .form-group {
-      flex: 1;
+    .field { margin-bottom: 20px; }
+    .field label {
+      display: block;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px; font-weight: 400;
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border-h);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.25s;
+      outline: none;
+    }
+    .field textarea { resize: vertical; min-height: 100px; }
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--subtle); }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+      background: #1c1c1c;
     }
 
-    /* Custom Select */
-    select.form-control {
-      appearance: none;
-      background: #ffffff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") no-repeat right 12px center/16px 12px;
-      padding-right: 40px;
+    .field input[type="file"] {
+      padding: 10px 14px;
+      border-style: dashed;
+      cursor: pointer;
+    }
+    .field input[type="file"]::file-selector-button {
+      background: var(--gold);
+      color: #080808;
+      border: none;
+      padding: 7px 14px;
+      margin-right: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.78rem;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .field input[type="file"]::file-selector-button:hover { background: var(--gold-l); }
+
+    .section-label {
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 14px; font-weight: 400;
     }
 
-    /* Checkboxes / Radios */
-    input[type="checkbox"],
-    input[type="radio"] {
-      width: 18px;
-      height: 18px;
-      accent-color: #2563eb;
-      margin-right: 8px;
+    .color-section {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      position: relative;
     }
+    .color-section .field:last-child { margin-bottom: 0; }
+    .remove-color {
+      position: absolute; top: 12px; right: 12px;
+      background: none; border: none;
+      color: var(--muted); cursor: pointer;
+      font-size: 0.9rem; padding: 4px;
+      transition: color 0.2s;
+    }
+    .remove-color:hover { color: var(--danger); }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .form-container {
-        margin: 20px;
-        padding: 30px 25px;
-      }
+    .btn-outline {
+      width: 100%;
+      background: transparent;
+      color: var(--muted);
+      border: 1px dashed var(--border-h);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: all 0.25s;
+      margin-bottom: 24px;
+    }
+    .btn-outline:hover { color: var(--gold); border-color: var(--gold); }
 
-      h2.form-title {
-        font-size: 24px;
-      }
+    .btn-gold-lg {
+      width: 100%;
+      background: var(--gold); color: #080808;
+      border: none; border-radius: 8px;
+      padding: 15px;
+      font-size: 0.85rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .btn-gold-lg:hover { background: var(--gold-l); transform: translateY(-1px); }
+    .btn-gold-lg:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-      .form-row {
-        flex-direction: column;
-        gap: 0;
-      }
+    #responseMessage {
+      min-height: 24px;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-top: 16px;
+    }
+    #responseMessage.success { color: var(--success); }
+    #responseMessage.error   { color: var(--danger); }
 
-      .btn-gradient {
-        width: 100%;
-      }
+    @media (max-width: 900px) {
+      .sidebar { position: fixed; top: 66px; left: 0; bottom: 0; z-index: 150; transform: translateX(-100%); transition: transform 0.25s; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-toggler { display: flex; }
+      .main-content { padding: 28px 1.25rem; }
+    }
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
     }
   </style>
-
 </head>
-
 <body>
-  <div class="form-container">
-    <h2 class="form-title">Add New Product</h2>
 
-    <form id="productForm" enctype="multipart/form-data">
-      <div class="row g-3 mb-3">
-        <div class="col-md-6">
-          <label class="form-label">Product SKU</label>
-          <input type="text" name="sku" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Product Title</label>
-          <input type="text" name="title" class="form-control" required />
-        </div>
-        <div class="col-12">
-          <label class="form-label">Description</label>
-          <textarea name="description" rows="3" class="form-control" required></textarea>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Brand</label>
-          <input type="text" name="brand" class="form-control" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Category</label>
-          <input type="text" name="category" class="form-control" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Material</label>
-          <input type="text" name="material" class="form-control" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Stock</label>
-          <input type="number" name="stock" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Price (PKR)</label>
-          <input type="number" name="price" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Main Image (Banner)</label>
-          <input type="file" name="main_image" class="form-control" accept="image/*" required />
-        </div>
+  <div class="dash-header">
+    <a class="dash-brand" href="2_homepage.html">
+      <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+      <span class="dash-brand-name">Cartinix</span>
+      <span class="dash-brand-tag">Admin</span>
+    </a>
+    <div class="header-right">
+      <span class="admin-email" id="adminEmailLabel"></span>
+      <button class="sidebar-toggler" id="sidebarToggler" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+      <button class="nav-btn-outline" id="logout">Logout</button>
+    </div>
+  </div>
+
+  <div class="dashboard">
+
+    <div class="sidebar" id="sidebar">
+      <a href="11_admin.html"><i class="fas fa-gauge"></i> Dashboard</a>
+      <a href="13_manageproduct.html"><i class="fas fa-boxes-stacked"></i> Manage Products</a>
+      <a href="12_addproduct.html" class="active"><i class="fas fa-circle-plus"></i> Add Product</a>
+      <a href="15_showorders.html"><i class="fas fa-receipt"></i> Check Orders</a>
+      <a href="16_manageorder.html"><i class="fas fa-truck-fast"></i> Manage Orders</a>
+      <a href="19_myincome.html"><i class="fas fa-sack-dollar"></i> My Income</a>
+    </div>
+
+    <div class="main-content">
+      <div class="page-eyebrow">Inventory</div>
+      <div class="page-title">Add New Product</div>
+
+      <div class="form-container">
+        <form id="productForm" enctype="multipart/form-data">
+          <div class="form-row">
+            <div class="field">
+              <label for="sku">Product SKU</label>
+              <input type="text" id="sku" name="sku" placeholder="e.g. CTX-001" required />
+            </div>
+            <div class="field">
+              <label for="title">Product Title</label>
+              <input type="text" id="title" name="title" placeholder="e.g. Heritage Chrono" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" placeholder="Describe the piece..." required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="brand">Brand</label>
+              <input type="text" id="brand" name="brand" placeholder="e.g. Cartinix" />
+            </div>
+            <div class="field">
+              <label for="category">Category</label>
+              <input type="text" id="category" name="category" placeholder="e.g. Dress Watch" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="material">Material</label>
+              <input type="text" id="material" name="material" placeholder="e.g. Stainless Steel" />
+            </div>
+            <div class="field">
+              <label for="stock">Stock</label>
+              <input type="number" id="stock" name="stock" min="0" placeholder="0" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="price">Price (PKR)</label>
+              <input type="number" id="price" name="price" min="0" step="0.01" placeholder="0" required />
+            </div>
+            <div class="field">
+              <label for="main_image">Main Image (Banner)</label>
+              <input type="file" id="main_image" name="main_image" accept="image/*" required />
+            </div>
+          </div>
+
+          <div id="colorVariantsContainer" style="margin-bottom: 14px;">
+            <div class="section-label">Color Variants</div>
+          </div>
+
+          <button type="button" class="btn-outline" id="addColor">+ Add Color Variant</button>
+          <button type="submit" class="btn-gold-lg" id="submitBtn">Submit Product</button>
+
+          <div id="responseMessage"></div>
+        </form>
       </div>
+    </div>
 
-      <div id="colorVariantsContainer" class="mb-3">
-        <label class="form-label">Color Variants</label>
-      </div>
-
-      <button type="button" class="btn btn-secondary mb-4" id="Color">+ Add Color Variant</button>
-      <button type="submit" class="btn btn-gradient w-100">Submit Product</button>
-
-      <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
-    </form>
   </div>
 
   <script>
-    const productform = document.getElementById("productForm");
-    const alert = document.getElementById("responseMessage");
-    document.getElementById("Color").addEventListener("click", (e) => {
-      e.preventDefault();
-      const container = document.getElementById("colorVariantsContainer");
+    // ── Admin auth guard ──
+    const adminEmail = localStorage.getItem("adminEmail");
+    if (!adminEmail) {
+      window.location.href = "1_Signin.html";
+    } else {
+      const label = document.getElementById("adminEmailLabel");
+      label.textContent = adminEmail;
+      label.style.display = "inline";
+    }
+
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("adminEmail");
+      window.location.href = "2_homepage.html";
+    });
+
+    document.getElementById("sidebarToggler").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("open");
+    });
+
+    // ── Color variant rows ──
+    const colorContainer = document.getElementById("colorVariantsContainer");
+
+    document.getElementById("addColor").addEventListener("click", () => {
       const colorSection = document.createElement("div");
       colorSection.className = "color-section";
-
       colorSection.innerHTML = `
-        <div class="mb-3">
-          <label class="form-label">Color Name</label>
-          <input type="text" name="color_names[]" class="form-control" placeholder="e.g. Black" required />
+        <button type="button" class="remove-color" aria-label="Remove color variant">
+          <i class="fas fa-xmark"></i>
+        </button>
+        <div class="field">
+          <label>Color Name</label>
+          <input type="text" name="color_names[]" placeholder="e.g. Black" required />
         </div>
-        <div class="mb-2">
-          <label class="form-label">Images for this color</label>
-          <input type="file" name="color_images[]" class="form-control" accept="image/*" required />
+        <div class="field">
+          <label>Images for this color</label>
+          <input type="file" name="color_images[]" accept="image/*" required />
         </div>
       `;
-      container.appendChild(colorSection);
+      colorSection.querySelector(".remove-color").addEventListener("click", () => {
+        colorSection.remove();
+      });
+      colorContainer.appendChild(colorSection);
     });
 
-    document.getElementById("productForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
+    // ── Submit ──
+    const form = document.getElementById("productForm");
+    const msg = document.getElementById("responseMessage");
+    const submitBtn = document.getElementById("submitBtn");
 
-      fetch("http://localhost:8000/listingproduct", {
-        method: "POST",
-        body: formData
-      })
-        .then(async res => {
-          const text = await res.json();
-          if (res.ok) {
-            alert.innerHTML = `<h5>${text.Error}</h5>`;
-            alert.style.color = 'red';
-          }
-        })
-        .then(data => {
-          alert.innerHTML = `<h5>${data.message}</h5>`;
-          alert.style.color = 'green';
-        })
-        .catch(err => {
-          alert.innerHTML = `<h5>${err.message}</h5>`;
-          alert.style.color = 'red';
+    function showMsg(text, type) {
+      msg.textContent = text;
+      msg.className = type;
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
+
+      try {
+        const res = await fetch("http://localhost:8000/listingproduct", {
+          method: "POST",
+          body: formData,
         });
+        const data = await res.json().catch(() => ({}));
+
+        // NOTE: previously this check was inverted (`if (res.ok)` was treated
+        // as an error), which meant a successful upload showed an error message.
+        if (!res.ok) throw new Error(data.Error || data.message || "Failed to add product.");
+
+        showMsg(data.message || "Product added successfully.", "success");
+        form.reset();
+        colorContainer.querySelectorAll(".color-section").forEach(el => el.remove());
+      } catch (err) {
+        showMsg(err.message, "error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Product";
+      }
     });
   </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

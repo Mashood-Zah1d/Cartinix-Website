@@ -1,268 +1,488 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>All Watches | WatchStore</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Cartinix | Collection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.16);
+      --gold: #c9a96e;
+      --gold-l: #e2c99a;
+      --text: #ede9e0;
+      --muted: #7a7268;
+      --subtle: #3f3b35;
+      --danger: #e05555;
+      --success: #4caf7d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: "Inter", sans-serif;
-      background: #ffffff;
-      color: #111827;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      padding-bottom: 40px;
     }
 
-    h1.stylish-heading {
-      font-family: "Playfair Display", serif;
-      font-size: 3rem;
+    .nav {
+      height: 66px;
+      display: flex; align-items: center;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-inner {
+      width: 100%; max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-brand img {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .nav-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 2px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 7px 14px; border-radius: 6px; transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-links a.active { color: var(--gold); }
+
+    .nav-right {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .nav-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 7px 14px; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; border: none;
+    }
+    .nav-btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-h);
+      color: var(--muted);
+    }
+    .nav-btn-outline:hover { color: var(--text); border-color: var(--muted); }
+    .nav-btn-gold {
+      background: var(--gold);
+      color: #080808;
+      font-weight: 500;
+    }
+    .nav-btn-gold:hover { background: var(--gold-l); }
+
+    .nav-cart {
+      color: var(--muted); font-size: 0.95rem;
+      padding: 7px 14px; border-radius: 6px;
+      transition: all 0.2s; cursor: pointer; text-decoration: none;
+    }
+    .nav-cart:hover { color: var(--text); background: var(--surface2); }
+
+    .nav-toggler {
+      display: none; background: none;
+      border: 1px solid var(--border); color: var(--text);
+      padding: 6px 10px; border-radius: 6px; cursor: pointer;
+    }
+
+    .hero {
       text-align: center;
-      margin-top: 40px;
-      color: #111827;
+      padding: 80px 2rem 50px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: ''; width: 28px; height: 1px; background: var(--gold); opacity: 0.5;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text); line-height: 1.05;
+      margin-bottom: 18px;
+    }
+    .hero h1 em { font-style: italic; color: var(--gold); }
+    .hero p {
+      font-size: 0.88rem; color: var(--muted);
+      font-weight: 300; max-width: 400px; margin: 0 auto;
+      line-height: 1.9;
     }
 
-    h2.sub-heading {
-      font-weight: 700;
-      font-size: 1.5rem;
-      text-align: center;
-      margin-bottom: 30px;
-      color: #374151;
-    }
-
-    .watch-card {
-      border-radius: 12px;
-      overflow: hidden;
-      background: #ffffff;
-      color: #111827;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
-      border: 1px solid #e5e7eb;
-      position: relative;
-    }
-
-    .watch-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-      border-color: #111827;
-    }
-
-    .watch-card img {
-      height: 300px;
-      width: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-
-    .watch-card:hover img {
-      transform: scale(1.05);
-    }
-
-    .card-body {
-      padding: 20px;
-      background: #ffffff;
-    }
-
-    .card-title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #111827;
-      margin-bottom: 10px;
-      transition: color 0.3s ease;
-    }
-
-    .watch-card:hover .card-title {
-      color: #000000;
-    }
-
-    .card-text {
-      color: #6b7280;
-      font-weight: 400;
-      margin-bottom: 12px;
-      line-height: 1.6;
-    }
-
-    .price-tag {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #111827;
-      margin-bottom: 15px;
-    }
-
-    .btn-buy {
-      background: #111827;
-      border: none;
-      font-weight: 600;
-      padding: 12px 20px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      cursor: pointer;
-    }
-
-    .btn-buy:hover {
-      background: #000000;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-    }
-
-    #logout {
-      cursor: pointer;
-    }
-
-    .container {
+    .shop-wrap {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 15px;
+      padding: 60px 2rem 80px;
     }
 
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      margin: 0 -15px;
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 28px;
     }
 
-    .col-md-4 {
-      flex: 0 0 33.333333%;
-      max-width: 33.333333%;
-      padding: 0 15px;
-      margin-bottom: 30px;
+    /* ─── 3D FLIP CARD ─── */
+    .card-scene {
+      perspective: 1600px;
+      height: 460px;
+    }
+    .watch-card {
+      position: relative;
+      width: 100%; height: 100%;
+      background: transparent;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .flip-inner {
+      position: relative;
+      width: 100%; height: 100%;
+      text-align: left;
+      transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .watch-card:hover .flip-inner,
+    .watch-card.flipped .flip-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-face {
+      position: absolute; inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--surface);
+      transition: border-color 0.3s ease;
+    }
+    .watch-card:hover .flip-face-front,
+    .watch-card.flipped .flip-face-front { border-color: var(--gold); }
+
+    .flip-face-front { display: flex; flex-direction: column; }
+    .flip-face-back {
+      transform: rotateY(180deg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 36px 28px;
+      border-color: var(--gold);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(201,169,110,0.08), transparent 60%),
+        var(--surface2);
+    }
+
+    .img-wrap {
+      overflow: hidden; height: 280px; position: relative; flex-shrink: 0;
+    }
+    .card-img {
+      width: 100%; height: 100%;
+      object-fit: cover; transition: transform 0.5s ease; display: block;
+    }
+    .img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,0.5) 0%, transparent 60%);
+    }
+    .card-body { padding: 22px 22px 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-eyebrow {
+      font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; font-weight: 700;
+      color: var(--text); letter-spacing: -0.01em;
+      margin-bottom: 14px; line-height: 1.2;
+    }
+    .card-footer-row {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 600; color: var(--gold);
+    }
+    .btn-view {
+      background: transparent;
+      border: 1px solid var(--border-h);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 9px 18px; border-radius: 6px;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .btn-view:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* BACK FACE CONTENT */
+    .back-icon {
+      width: 52px; height: 52px;
+      border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 1.25rem;
+      margin-bottom: 22px;
+    }
+    .back-eyebrow {
+      font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .back-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--text); line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .back-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 600; color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .back-tagline {
+      font-size: 0.8rem; color: var(--muted); font-weight: 300;
+      line-height: 1.7; max-width: 240px; margin-bottom: 26px;
+    }
+    .btn-view-back {
+      background: var(--gold);
+      color: #080808;
+      border: none; border-radius: 6px;
+      padding: 11px 26px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .btn-view-back:hover { background: var(--gold-l); }
+
+    .error-state { text-align: center; padding: 80px 2rem; }
+    .error-state p { color: var(--danger); font-size: 0.9rem; }
+
+    .skeleton {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .skeleton-img { width: 100%; height: 280px; background: var(--surface2); }
+    .skeleton-body { padding: 22px; }
+    .skeleton-line {
+      height: 12px; border-radius: 4px;
+      background: var(--surface2); margin-bottom: 12px;
     }
 
     @media (max-width: 768px) {
-      .col-md-4 {
-        flex: 0 0 100%;
-        max-width: 100%;
+      .nav-links, .nav-right { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: fixed; inset: 66px 0 0 0;
+        background: rgba(8,8,8,0.98);
+        padding: 2rem; z-index: 199; gap: 6px;
       }
-
-      h1.stylish-heading {
-        font-size: 2.2rem;
+      .nav-links.open a { font-size: 1rem; padding: 12px 16px; }
+      .nav-right.open {
+        display: flex; flex-direction: column;
+        position: fixed; top: 66px; left: 0; right: 0;
+        padding: 0 2rem 2rem;
+        background: rgba(8,8,8,0.98);
+        z-index: 198; gap: 10px;
       }
-
-      .watch-card img {
-        height: 240px;
-      }
-    }
-
-    .navbar {
-      background: #ffffff;
-      height: 70px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      padding: 0.6rem 1rem;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .navbar .nav-link {
-      color: #111827 !important;
-      font-weight: 500;
-      margin-left: 10px;
-      padding: 6px 12px;
-      transition: all 0.3s ease;
-      border-radius: 8px;
-    }
-
-    .navbar .nav-link.active {
-      background: #f3f4f6;
-      color: #000000 !important;
-    }
-
-    .navbar .nav-link:hover {
-      background: #111827;
-      color: #ffffff !important;
-      transform: translateY(-1px);
-    }
-     
-    .logo{
-      height: 70px;
+      .nav-toggler { display: flex; }
+      .products-grid { grid-template-columns: 1fr; gap: 20px; }
+      .hero { padding: 56px 1.5rem 40px; }
+      .card-scene { height: 420px; }
     }
   </style>
-
 </head>
-
 <body>
-  <nav class="navbar navbar-expand-lg shadow-sm">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="2_homepage.html">
-        <img class="logo" src="http://localhost:8000/photos/logo.jpg" alt="Cartinix Logo" class="logo-img me-2" />
-        <span class="text-white fw-bold">Cartinix</span>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="2_homepage.html">
+        <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+        <span class="nav-brand-name">Cartinix</span>
       </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"></span>
+      <button class="nav-toggler" id="navToggler" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
       </button>
 
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-          <li class="nav-item"><a class="nav-link " href="2_homepage.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="3_Allproducts.html">Shop</a></li>
-          <li class="nav-item"><a class="nav-link" href="10_about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="9_myorders.html">My Orders</a></li>
-          <li class="nav-item"><a class="nav-link" href="1_Signin.html">Login/Signup</a></li>
-          <li class="nav-item"><a class="nav-link" id="logout">Logout</a></li>
-          <li class="nav-item">
-            <a class="nav-link position-relative" href="7_showcart.html">
-              <i class="fas fa-shopping-cart"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="2_homepage.html">Home</a></li>
+        <li><a href="3_Allproducts.html" class="active">Shop</a></li>
+        <li><a href="10_about.html">About</a></li>
+        <li id="myOrdersLink" style="display:none;"><a href="9_myorders.html">My Orders</a></li>
+      </ul>
+
+      <div class="nav-right" id="navAuth"></div>
     </div>
   </nav>
-  <div class="container">
-    <h1 class="stylish-heading">Timeless Elegance</h1>
-    <h2 class="sub-heading">Explore Our Complete Watch Collection</h2>
 
-    <div class="row g-4" id="allProducts"></div>
+  <section class="hero">
+    <div class="hero-tag">The Collection</div>
+    <h1>Crafted for those<br>who value <em>precision</em></h1>
+    <p>Every piece in our collection is a story of craftsmanship, heritage, and timeless design.</p>
+  </section>
+
+  <div class="shop-wrap">
+    <div class="products-grid" id="allProducts">
+      <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line" style="width:60%"></div><div class="skeleton-line" style="width:40%"></div></div></div>
+      <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line" style="width:70%"></div><div class="skeleton-line" style="width:35%"></div></div></div>
+      <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line" style="width:55%"></div><div class="skeleton-line" style="width:45%"></div></div></div>
+    </div>
+    <div id="errorMsg" style="display:none" class="error-state"><p id="errorText"></p></div>
   </div>
-  <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
 
   <script>
-    const container = document.getElementById("allProducts");
-    const alert = document.getElementById("responseMessage");
+    // ── Shared auth check (same logic used across all pages) ──
+    // Logged in if either a general "token" exists, or a customer/admin email is set.
+    function isUserLoggedIn() {
+      return !!(
+        localStorage.getItem("token") ||
+        localStorage.getItem("customerEmail") ||
+        localStorage.getItem("adminEmail")
+      );
+    }
+
+    function renderNavAuth() {
+      const navAuth = document.getElementById("navAuth");
+      const myOrdersLink = document.getElementById("myOrdersLink");
+      const loggedIn = isUserLoggedIn();
+
+      myOrdersLink.style.display = loggedIn ? "" : "none";
+
+      if (loggedIn) {
+        navAuth.innerHTML = `
+          <a class="nav-cart" href="7_showcart.html" aria-label="Cart">
+            <i class="fas fa-shopping-cart"></i>
+          </a>
+          <button class="nav-btn nav-btn-outline" id="logoutBtn">Logout</button>
+        `;
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+          localStorage.clear();
+          window.location.href = "1_Signin.html";
+        });
+      } else {
+        navAuth.innerHTML = `
+          <a class="nav-cart" href="7_showcart.html" aria-label="Cart">
+            <i class="fas fa-shopping-cart"></i>
+          </a>
+          <a href="1_Signin.html" class="nav-btn nav-btn-outline">Login</a>
+          <a href="0_signup.html" class="nav-btn nav-btn-gold">Sign Up</a>
+        `;
+      }
+    }
+
+    function initMobileNav() {
+      const navToggler = document.getElementById("navToggler");
+      const navLinks = document.getElementById("navLinks");
+      const navAuth = document.getElementById("navAuth");
+      navToggler.addEventListener("click", () => {
+        navLinks.classList.toggle("open");
+        navAuth.classList.toggle("open");
+      });
+    }
+
+    renderNavAuth();
+    initMobileNav();
+
+    // ── Product listing ──
+    const grid = document.getElementById("allProducts");
+    const errBox = document.getElementById("errorMsg");
+    const errTxt = document.getElementById("errorText");
+
     fetch("http://localhost:8000/users/product-info")
       .then(res => res.json())
       .then(data => {
+        grid.innerHTML = "";
+        if (!data.length) {
+          grid.innerHTML = `<p style="color:var(--muted);text-align:center;padding:60px 0;font-size:0.88rem;letter-spacing:0.1em;text-transform:uppercase;">No watches found</p>`;
+          return;
+        }
+        // Touch devices can't hover, so tap flips the card instead
+        const isTouch = window.matchMedia("(hover: none)").matches;
+
+        const goToDetails = (sku) => {
+          localStorage.setItem("productid", sku);
+          window.location.href = "4_viewdetail.html";
+        };
+
         data.forEach(product => {
-          const cardHTML = `
-            <div class="col-md-4">
-              <div class="card watch-card">
-                <img src="http://localhost:8000/photos/${product.image_path}" class="card-img-top" alt="Watch Image">
-                <div class="card-body text-center">
-                  <h5 class="card-title">${product.title}</h5>
-                  <p class="card-text">Price: ${product.price} Rs</p>
-                  <button class="btn btn-buy w-100 mt-2" data-id="${product.sku}">View Details</button>
+          const scene = document.createElement("div");
+          scene.className = "card-scene";
+
+          const card = document.createElement("div");
+          card.className = "watch-card";
+          card.innerHTML = `
+            <div class="flip-inner">
+              <div class="flip-face flip-face-front">
+                <div class="img-wrap">
+                  <img class="card-img" src="http://localhost:8000/photos/${product.image_path}" alt="${product.title}" loading="lazy" />
+                  <div class="img-overlay"></div>
                 </div>
+                <div class="card-body">
+                  <div class="card-eyebrow">Cartinix &mdash; Timepiece</div>
+                  <div class="card-title">${product.title}</div>
+                  <div class="card-footer-row">
+                    <span class="card-price">Rs ${Number(product.price).toLocaleString()}</span>
+                    <button class="btn-view" type="button">View Details</button>
+                  </div>
+                </div>
+              </div>
+              <div class="flip-face flip-face-back">
+                <div class="back-icon"><i class="fas fa-clock"></i></div>
+                <div class="back-eyebrow">Cartinix &mdash; Timepiece</div>
+                <div class="back-title">${product.title}</div>
+                <div class="back-price">Rs ${Number(product.price).toLocaleString()}</div>
+                <p class="back-tagline">Handpicked for precision and heritage, delivered with insured nationwide shipping.</p>
+                <button class="btn-view-back" type="button">View Details</button>
               </div>
             </div>
           `;
-          container.innerHTML += cardHTML;
-        });
 
-        document.querySelectorAll(".btn-buy").forEach(btn => {
-          btn.addEventListener("click", () => {
-            localStorage.setItem("productid", btn.getAttribute("data-id"));
-            window.location.href = "4_viewdetail.html";
+          card.querySelectorAll(".btn-view, .btn-view-back").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              goToDetails(product.sku);
+            });
           });
-        });
 
-        document.getElementById("logout").addEventListener("click", (e) => {
-          e.preventDefault();
-          localStorage.clear();
-          window.location.href = '1_Signin.html'
-        })
+          // On touch devices, tapping the card flips it; tapping again (or the
+          // button) opens the product. On pointer devices, hover already flips it.
+          if (isTouch) {
+            card.addEventListener("click", () => {
+              card.classList.toggle("flipped");
+            });
+          }
+
+          scene.appendChild(card);
+          grid.appendChild(scene);
+        });
       })
-      .catch(error => {
-        alert.innerHTML = `<h5>${error.message}</h5>`
-        alert.style.color = 'red';
+      .catch(err => {
+        grid.innerHTML = "";
+        errBox.style.display = "block";
+        errTxt.textContent = err.message;
       });
   </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

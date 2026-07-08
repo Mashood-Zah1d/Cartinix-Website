@@ -1,288 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Cartinix | Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.16);
+      --gold: #c9a96e;
+      --gold-l: #e2c99a;
+      --text: #ede9e0;
+      --muted: #7a7268;
+      --subtle: #3f3b35;
+      --danger: #e05555;
+      --success: #4caf7d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0;
-      font-family: 'Outfit', sans-serif;
-      background: #ffffff;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      color: #111827;
     }
 
-    .dashboard-header {
-      background: #ffffff;
-      color: #111827;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 600;
-      height: 60px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      border-bottom: 1px solid #e5e7eb;
+    /* ── HEADER ── */
+    .dash-header {
+      height: 66px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.5rem, 4vw, 2.5rem);
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
     }
-
-    .dashboard-header .brand {
-      font-family: 'Poppins', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: black;
-    }
-
-    .dashboard-header .header-actions button {
-      background: white;
-      color: black;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 20px;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .dashboard-header .header-actions button:hover {
-      background: black;
-      color: white;
-    }
-
-    .dashboard {
-      display: flex;
-      height: calc(100vh - 60px);
-    }
-
-     .sidebar {
-      width: 260px;
-      background: #ffffff;
-      color: #374151;
-      padding-top: 25px;
-      flex-shrink: 0;
-      border-right: 1px solid #e5e7eb;
-    }
-
-    .sidebar a {
-      display: block;
-      color: #374151;
-      padding: 14px 20px;
-      margin: 6px 16px;
+    .dash-brand {
+      display: flex; align-items: center; gap: 10px;
       text-decoration: none;
+    }
+    .dash-brand img {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .dash-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
+    }
+    .dash-brand-tag {
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); margin-left: 8px;
+      padding: 3px 10px; border: 1px solid var(--border-h); border-radius: 20px;
+    }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .admin-email {
+      font-size: 0.78rem; color: var(--muted);
+      display: none;
+    }
+    .nav-btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-h);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 8px 16px; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .nav-btn-outline:hover { color: var(--text); border-color: var(--muted); }
+    .sidebar-toggler {
+      display: none; background: none;
+      border: 1px solid var(--border); color: var(--text);
+      padding: 6px 10px; border-radius: 6px; cursor: pointer;
+    }
+
+    /* ── LAYOUT ── */
+    .dashboard { display: flex; min-height: calc(100vh - 66px); }
+
+    .sidebar {
+      width: 240px; flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 14px;
+    }
+    .sidebar a {
+      display: flex; align-items: center; gap: 10px;
+      color: var(--muted); text-decoration: none;
+      padding: 11px 16px; margin-bottom: 4px;
       border-radius: 8px;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
+      font-size: 0.85rem; font-weight: 400;
+      transition: all 0.2s;
     }
-
-    .sidebar a:hover {
-      background: #f3f4f6;
-      color: #111827;
-    }
-
+    .sidebar a i { width: 16px; text-align: center; font-size: 0.85rem; }
+    .sidebar a:hover { background: var(--surface2); color: var(--text); }
     .sidebar a.active {
-      background: #2563eb;
-      color: white;
+      background: rgba(201,169,110,0.1);
+      color: var(--gold);
+      border: 1px solid rgba(201,169,110,0.25);
     }
 
-    /* Main Content */
-    .main-content {
-      flex-grow: 1;
-      padding: 32px;
-      background: #ffffff;
-      overflow-y: auto;
+    .main-content { flex: 1; padding: 40px clamp(1.5rem, 4vw, 3rem); }
+
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+    }
+    .page-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--gold); opacity: 0.5; }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700; color: var(--text);
+      margin-bottom: 36px;
     }
 
-    .main-content h4 {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 700;
-      color: #111827;
-      font-size: 2rem;
-      text-align: center;
-      margin-bottom: 32px;
-      position: relative;
-    }
-
-    .main-content h4::after {
-      content: '';
-      display: block;
-      width: 80px;
-      height: 3px;
-      background: #2563eb;
-      margin: 12px auto 0;
-      border-radius: 2px;
-    }
-
-    /* Product Cards / Rows */
-    .product-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .product-card {
-      background: #f9fafb;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s ease;
-      border: 1px solid #e5e7eb;
-    }
-
-    .product-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-      border-color: #2563eb;
-    }
-
+    /* ── PRODUCT ROWS ── */
+    .product-list { display: flex; flex-direction: column; gap: 14px; }
     .product-row {
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center; gap: 20px;
       padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 10px;
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      transition: all 0.3s ease;
-      margin-bottom: 16px;
-      gap: 20px;
+      transition: all 0.25s;
     }
-
-    .product-row:hover {
-      transform: translateX(6px);
-      border-color: #2563eb;
-      background: #f9fafb;
-    }
-
+    .product-row:hover { border-color: var(--gold); transform: translateX(4px); }
     .product-row img {
-      height: 60px;
-      width: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
+      width: 60px; height: 60px;
+      object-fit: cover; border-radius: 8px;
+      border: 1px solid var(--border-h);
+      flex-shrink: 0;
     }
-
-    .product-details {
-      display: flex;
-      flex-direction: column;
-    }
-
+    .product-details { flex: 1; min-width: 0; }
     .product-details h6 {
-      margin: 0 0 4px 0;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #111827;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--text); margin-bottom: 4px;
     }
-     
-    .logo{
-      height: 70px;
+    .product-meta {
+      display: flex; flex-wrap: wrap; gap: 4px 16px;
+      font-size: 0.78rem; color: var(--muted);
     }
-    .product-details p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: #6b7280;
+    .product-meta strong { color: var(--text); font-weight: 500; }
+    .stock-pill {
+      font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px;
+      border: 1px solid var(--border-h);
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .stock-pill.low { color: var(--danger); border-color: rgba(224,85,85,0.35); }
+    .stock-pill.ok { color: var(--success); border-color: rgba(76,175,125,0.35); }
+
+    /* ── SKELETON ── */
+    .skeleton-row {
+      height: 92px; border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .dashboard {
-        flex-direction: column;
-      }
+    /* ── EMPTY / ERROR STATES ── */
+    .state-block {
+      text-align: center;
+      padding: 60px 2rem;
+      border: 1px dashed var(--border-h);
+      border-radius: 12px;
+    }
+    .state-icon {
+      width: 48px; height: 48px; margin: 0 auto 16px;
+      border: 1px solid rgba(201,169,110,0.25);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 1.1rem;
+    }
+    .state-block.error .state-icon { color: var(--danger); border-color: rgba(224,85,85,0.3); }
+    .state-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--text); margin-bottom: 6px;
+    }
+    .state-desc { font-size: 0.83rem; color: var(--muted); font-weight: 300; }
 
-      .sidebar {
-        width: 100%;
-        height: auto;
-      }
-
-      .main-content {
-        padding: 20px;
-      }
-
-      .main-content h4 {
-        font-size: 1.6rem;
-      }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .sidebar { position: fixed; top: 66px; left: 0; bottom: 0; z-index: 150; transform: translateX(-100%); transition: transform 0.25s; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-toggler { display: flex; }
+      .main-content { padding: 28px 1.25rem; }
+      .product-row { flex-wrap: wrap; }
     }
   </style>
-
 </head>
-
 <body>
 
-  <div class="dashboard-header">
-   <a class="navbar-brand d-flex align-items-center" href="2_homepage.html">
-        <img class="logo" src="http://localhost:8000/photos/logo.jpg" alt="Cartinix Logo" class="logo-img me-2 " />
-        <span class="text-white fw-bold">Cartinix</span>
-      </a>
-    <div class="header-actions">
-      <button id="logout">Logout</button>
+  <div class="dash-header">
+    <a class="dash-brand" href="2_homepage.html">
+      <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+      <span class="dash-brand-name">Cartinix</span>
+      <span class="dash-brand-tag">Admin</span>
+    </a>
+    <div class="header-right">
+      <span class="admin-email" id="adminEmailLabel"></span>
+      <button class="sidebar-toggler" id="sidebarToggler" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+      <button class="nav-btn-outline" id="logout">Logout</button>
     </div>
   </div>
 
   <div class="dashboard">
 
-    <div class="sidebar">
-      <a href="11_admin.html">Dashboard</a>
-      <a href="13_manageproduct.html">Manage Products</a>
-      <a href="12_addproduct.html">Add Product</a>
-      <a href="15_showorders.html">Check Orders</a>
-      <a href="16_manageorder.html">Manage Orders</a>
-      <a href="19_myincome.html">My Income</a>
+    <div class="sidebar" id="sidebar">
+      <a href="11_admin.html" class="active"><i class="fas fa-gauge"></i> Dashboard</a>
+      <a href="13_manageproduct.html"><i class="fas fa-boxes-stacked"></i> Manage Products</a>
+      <a href="12_addproduct.html"><i class="fas fa-circle-plus"></i> Add Product</a>
+      <a href="15_showorders.html"><i class="fas fa-receipt"></i> Check Orders</a>
+      <a href="16_manageorder.html"><i class="fas fa-truck-fast"></i> Manage Orders</a>
+      <a href="19_myincome.html"><i class="fas fa-sack-dollar"></i> My Income</a>
     </div>
 
     <div class="main-content">
-      <h4>Listed Products on the Store</h4>
-      <div class="product-list" id="productContainer">
+      <div class="page-eyebrow">Overview</div>
+      <div class="page-title">Listed Products on the Store</div>
 
+      <div class="product-list" id="productContainer">
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
       </div>
-      <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
     </div>
 
   </div>
+
   <script>
-    const content = document.querySelector(".product-list");
-    const alert = document.getElementById("responseMessage");
-    fetch(`http://localhost:8000/admin/details`)
+    // ── Admin auth guard ──
+    const adminEmail = localStorage.getItem("adminEmail");
+    if (!adminEmail) {
+      window.location.href = "1_Signin.html";
+    } else {
+      const label = document.getElementById("adminEmailLabel");
+      label.textContent = adminEmail;
+      label.style.display = "inline";
+    }
+
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("adminEmail");
+      window.location.href = "2_homepage.html";
+    });
+
+    document.getElementById("sidebarToggler").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("open");
+    });
+
+    function escapeHtml(str) {
+      return String(str ?? "").replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[c]));
+    }
+
+    const container = document.getElementById("productContainer");
+
+    function renderState({ icon, title, desc, error = false }) {
+      container.innerHTML = `
+        <div class="state-block ${error ? "error" : ""}">
+          <div class="state-icon"><i class="fas ${icon}"></i></div>
+          <div class="state-title">${title}</div>
+          <div class="state-desc">${desc}</div>
+        </div>
+      `;
+    }
+
+    fetch("http://localhost:8000/admin/details")
       .then(async res => {
         if (!res.ok) {
-          const text = await res.json();
-          alert.innerHTML = `<h5>${text.Error}</h5>`
-          alert.style.color = `red`
-          throw new Error(text.err);
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.Error || "Failed to load products.");
         }
         return res.json();
       })
       .then(data => {
-        data.forEach(product => {
-          const listing = document.createElement("div");
-          listing.classList.add("product-row");
-          listing.innerHTML = `
-  <img src="http://localhost:8000/photos/${product.image_path}" alt="${product.product_name}">
-  <div class="product-details">
-    <h6>${product.title}</h6>
-    <p><strong>Brand:</strong> ${product.brand}</p>
-    <p><strong>Price:</strong> ${product.price}-/rs</p>
-    <p><strong>Qty:</strong> ${product.stock}</p>
-  </div>
-`;
+        if (!data || !data.length) {
+          renderState({
+            icon: "fa-box-open",
+            title: "No products listed yet",
+            desc: "Add your first watch to see it appear here."
+          });
+          return;
+        }
 
-          content.appendChild(listing);
+        container.innerHTML = "";
+        data.forEach(product => {
+          const stock = Number(product.stock) || 0;
+          const stockClass = stock === 0 ? "low" : stock < 5 ? "low" : "ok";
+
+          const row = document.createElement("div");
+          row.className = "product-row";
+          row.innerHTML = `
+            <img src="http://localhost:8000/photos/${product.image_path}" alt="${escapeHtml(product.title)}" loading="lazy" />
+            <div class="product-details">
+              <h6>${escapeHtml(product.title)}</h6>
+              <div class="product-meta">
+                <span><strong>Brand:</strong> ${escapeHtml(product.brand)}</span>
+                <span><strong>Price:</strong> Rs ${Number(product.price).toLocaleString()}</span>
+              </div>
+            </div>
+            <div class="stock-pill ${stockClass}">${stock} in stock</div>
+          `;
+          container.appendChild(row);
         });
       })
       .catch(err => {
-        alert.innerHTML = `<h5>${err.message}</h5>`
-        alert.style.color = `red`
+        renderState({
+          icon: "fa-triangle-exclamation",
+          title: "Something went wrong",
+          desc: err.message || "Please try again in a moment.",
+          error: true
+        });
       });
-
-    document.getElementById("logout").addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("adminEmail");
-      window.location.href = '2_homepage.html';
-    })
   </script>
 </body>
-
 </html>

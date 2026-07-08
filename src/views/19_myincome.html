@@ -1,422 +1,524 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Cartinix | My Income</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.16);
+      --gold: #c9a96e;
+      --gold-l: #e2c99a;
+      --text: #ede9e0;
+      --muted: #7a7268;
+      --subtle: #3f3b35;
+      --danger: #e05555;
+      --success: #4caf7d;
+      --info: #7ea1e0;
+      --warn: #e0b355;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #f9fafb;
-      color: #111827;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    .dashboard-header {
-      background: white;
-      color: black;
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 600;
-      height: 60px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      border-bottom: 1px solid #e5e7eb;
+    /* ── HEADER ── */
+    .dash-header {
+      height: 66px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.5rem, 4vw, 2.5rem);
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .dash-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .dash-brand img {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .dash-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
+    }
+    .dash-brand-tag {
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); margin-left: 8px;
+      padding: 3px 10px; border: 1px solid var(--border-h); border-radius: 20px;
+    }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .admin-email { font-size: 0.78rem; color: var(--muted); display: none; }
+    .nav-btn-outline {
+      background: transparent; border: 1px solid var(--border-h); color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 8px 16px; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .nav-btn-outline:hover { color: var(--text); border-color: var(--muted); }
+    .sidebar-toggler {
+      display: none; background: none;
+      border: 1px solid var(--border); color: var(--text);
+      padding: 6px 10px; border-radius: 6px; cursor: pointer;
     }
 
-    .dashboard-header .brand {
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: black;
+    /* ── LAYOUT ── */
+    .dashboard { display: flex; min-height: calc(100vh - 66px); }
+
+    .sidebar {
+      width: 240px; flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 14px;
     }
-
-    .dashboard-header .header-actions button {
-      background: white;
-      color: black;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .dashboard-header .header-actions button:hover {
-      background: black;
-      color: white;
-      transform: translateY(-2px);
-
-    }
-
-    .dashboard {
-      display: flex;
-      height: calc(100vh - 60px);
-    }
-
-     .sidebar {
-      width: 260px;
-      background: #ffffff;
-      color: #374151;
-      padding-top: 25px;
-      flex-shrink: 0;
-      border-right: 1px solid #e5e7eb;
-    }
-
     .sidebar a {
-      display: block;
-      color: #374151;
-      padding: 14px 20px;
-      margin: 6px 16px;
-      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      color: var(--muted); text-decoration: none;
+      padding: 11px 16px; margin-bottom: 4px;
       border-radius: 8px;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
+      font-size: 0.85rem; font-weight: 400;
+      transition: all 0.2s;
     }
-
-    .sidebar a:hover {
-      background: #f3f4f6;
-      color: #111827;
-    }
-
+    .sidebar a i { width: 16px; text-align: center; font-size: 0.85rem; }
+    .sidebar a:hover { background: var(--surface2); color: var(--text); }
     .sidebar a.active {
-      background: #2563eb;
-      color: white;
+      background: rgba(201,169,110,0.1);
+      color: var(--gold);
+      border: 1px solid rgba(201,169,110,0.25);
     }
 
-    .logo {
-      height: 70px;
+    .main-content { flex: 1; padding: 40px clamp(1.5rem, 4vw, 3rem); }
+
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+    }
+    .page-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--gold); opacity: 0.5; }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700; color: var(--text);
+      margin-bottom: 8px;
+    }
+    .page-sub {
+      font-size: 0.84rem; color: var(--muted); font-weight: 300;
+      margin-bottom: 32px;
     }
 
-  
-    .main-content {
-      flex-grow: 1;
-      padding: 30px;
-      background: #f9fafb;
-      overflow-y: auto;
-    }
-
-    .main-content h4 {
-      font-weight: 800;
-      color: #111827;
-      font-size: 1.8rem;
-      text-align: center;
-      margin-bottom: 30px;
-      position: relative;
-    }
-
-    .main-content h4::after {
-      content: '';
-      display: block;
-      width: 80px;
-      height: 3px;
-      background: linear-gradient(90deg, #06b6d4, #3b82f6, #8b5cf6);
-      margin: 14px auto 0;
-      border-radius: 2px;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-    }
-
-    .product-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .product-row {
-      display: flex;
-      align-items: flex-start;
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      width: 100%;
-      gap: 20px;
+    /* ── MONTH FILTER ── */
+    .month-filter {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px;
       flex-wrap: wrap;
-      transition: all 0.3s ease;
-      border: 1px solid #e5e7eb;
     }
-
-    .product-row:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
-      border-color: #3b82f6;
+    .month-filter label {
+      font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); display: flex; align-items: center; gap: 8px;
     }
-
-    .product-row img {
-      height: 80px;
-      width: 80px;
-      object-fit: cover;
-      border-radius: 10px;
-      transition: transform 0.3s ease;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-      border: 1px solid #e5e7eb;
-    }
-
-    .product-row:hover img {
-      transform: scale(1.05);
-    }
-
-    .product-details {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .product-details h6 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: #111827;
-      transition: color 0.3s ease;
-    }
-
-    .product-row:hover .product-details h6 {
-      color: #2563eb;
-    }
-
-    .product-details p {
-      margin: 4px 0;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #4b5563;
-    }
-
-    .product-details label {
+    .month-filter label i { color: var(--gold); }
+    .month-filter select {
+      background: var(--surface);
+      border: 1px solid var(--border-h);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
       font-size: 0.85rem;
-      font-weight: 600;
-      color: #374151;
-      margin-top: 8px;
-      margin-bottom: 6px;
-    }
-
-    .product-details input {
-      width: 120px;
-      padding: 8px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      margin-right: 10px;
-      background: #f9fafb;
-      color: #111827;
-      transition: all 0.2s ease;
-    }
-
-    .product-details input:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-
-    .product-details button {
-      padding: 8px 16px;
-      border: none;
+      padding: 9px 14px;
       border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.3s ease;
-      margin-right: 8px;
+      outline: none;
+      min-width: 200px;
     }
+    .month-filter select:focus { border-color: var(--gold); }
+    .month-filter select option { background: var(--surface); color: var(--text); }
 
-    .product-details button#edit {
-      background: linear-gradient(135deg, #7c3aed, #6366f1);
-      color: white;
+    /* ── STAT CARDS ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
     }
-
-    .product-details button#edit:hover {
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      transform: translateY(-2px);
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      display: flex; align-items: center; gap: 16px;
     }
-
-    .product-details button#save {
-      background: linear-gradient(135deg, #059669, #10b981);
-      color: white;
+    .stat-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
     }
+    .stat-icon.gold  { color: var(--gold); background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.25); }
+    .stat-icon.success { color: var(--success); background: rgba(76,175,125,0.1); border: 1px solid rgba(76,175,125,0.25); }
+    .stat-icon.info { color: var(--info); background: rgba(126,161,224,0.1); border: 1px solid rgba(126,161,224,0.25); }
+    .stat-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700; color: var(--text); }
 
-    .product-details button#save:hover {
-      background: linear-gradient(135deg, #047857, #059669);
-      transform: translateY(-2px);
+    /* ── MONTH GROUP HEADER (shown within order list when viewing All Time) ── */
+    .month-group-header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
+      margin: 28px 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-h);
     }
-
-    .product-details button#delete {
-      background: linear-gradient(135deg, #dc2626, #ef4444);
-      color: white;
+    .month-group-header:first-child { margin-top: 0; }
+    .month-group-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 700; color: var(--gold-l);
+      display: flex; align-items: center; gap: 8px;
     }
+    .month-group-title i { color: var(--gold); font-size: 0.95rem; }
+    .month-group-total { font-size: 0.8rem; color: var(--muted); }
+    .month-group-total strong { color: var(--gold); font-weight: 600; }
 
-    .product-details button#delete:hover {
-      background: linear-gradient(135deg, #b91c1c, #dc2626);
-      transform: translateY(-2px);
+    /* ── SECTION HEADER ── */
+    .section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
     }
+    .section-heading i { color: var(--gold); font-size: 0.95rem; }
 
-    .product-details .form-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px;
-      margin-top: 12px;
+    /* ── ORDER CARDS ── */
+    .order-list { display: flex; flex-direction: column; gap: 16px; }
+    .order-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
     }
+    .order-head {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .order-id {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 700; color: var(--text);
+    }
+    .status-pill {
+      font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 20px;
+      border: 1px solid rgba(76,175,125,0.35);
+      color: var(--success); background: rgba(76,175,125,0.08);
+    }
+    .order-subtotal { font-size: 0.82rem; color: var(--muted); }
+    .order-subtotal strong { color: var(--gold); font-weight: 600; }
 
-    @media (max-width: 768px) {
-      .dashboard {
-        flex-direction: column;
-      }
+    .order-item { display: flex; align-items: center; gap: 14px; padding: 8px 0; }
+    .order-item img {
+      width: 52px; height: 52px; object-fit: cover; border-radius: 8px;
+      border: 1px solid var(--border-h); flex-shrink: 0;
+    }
+    .order-item-title { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+    .order-item-meta { font-size: 0.78rem; color: var(--muted); }
 
-      .sidebar {
-        width: 100%;
-        height: auto;
-      }
+    /* ── SKELETON / EMPTY / ERROR ── */
+    .skeleton-card { height: 100px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 16px; }
+    .state-block {
+      text-align: center; padding: 60px 2rem;
+      border: 1px dashed var(--border-h); border-radius: 12px;
+    }
+    .state-icon {
+      width: 48px; height: 48px; margin: 0 auto 16px;
+      border: 1px solid rgba(201,169,110,0.25); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 1.1rem;
+    }
+    .state-block.error .state-icon { color: var(--danger); border-color: rgba(224,85,85,0.3); }
+    .state-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 700; color: var(--text); margin-bottom: 6px;
+    }
+    .state-desc { font-size: 0.83rem; color: var(--muted); font-weight: 300; }
 
-      .product-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .product-row img {
-        margin-bottom: 10px;
-      }
-
-      .product-details .form-actions {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .product-details input {
-        width: 100%;
-      }
-
-      .main-content h4 {
-        font-size: 1.5rem;
-      }
+    @media (max-width: 900px) {
+      .sidebar { position: fixed; top: 66px; left: 0; bottom: 0; z-index: 150; transform: translateX(-100%); transition: transform 0.25s; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-toggler { display: flex; }
+      .main-content { padding: 28px 1.25rem; }
     }
   </style>
-
-
-
 </head>
-
 <body>
 
-  <div class="dashboard-header">
-    <a class="navbar-brand d-flex align-items-center" href="2_homepage.html">
-        <img class="logo" src="http://localhost:8000/photos/logo.jpg" alt="Cartinix Logo" class="logo-img me-2 " />
-        <span class="text-white fw-bold">Cartinix</span>
-      </a>
-    <div class="header-actions">
-      <button id="logout">Logout</button>
+  <div class="dash-header">
+    <a class="dash-brand" href="2_homepage.html">
+      <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+      <span class="dash-brand-name">Cartinix</span>
+      <span class="dash-brand-tag">Admin</span>
+    </a>
+    <div class="header-right">
+      <span class="admin-email" id="adminEmailLabel"></span>
+      <button class="sidebar-toggler" id="sidebarToggler" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+      <button class="nav-btn-outline" id="logout">Logout</button>
     </div>
   </div>
 
   <div class="dashboard">
 
-    <div class="sidebar">
-      <a href="11_admin.html">Dashboard</a>
-      <a href="13_manageproduct.html">Manage Products</a>
-      <a href="12_addproduct.html">Add Product</a>
-      <a href="15_showorders.html">Check Orders</a>
-      <a href="16_manageorder.html">Manage Orders</a>
-      <a href="19_myincome.html">My Income</a>
+    <div class="sidebar" id="sidebar">
+      <a href="11_admin.html"><i class="fas fa-gauge"></i> Dashboard</a>
+      <a href="13_manageproduct.html"><i class="fas fa-boxes-stacked"></i> Manage Products</a>
+      <a href="12_addproduct.html"><i class="fas fa-circle-plus"></i> Add Product</a>
+      <a href="15_showorders.html"><i class="fas fa-receipt"></i> Check Orders</a>
+      <a href="16_manageorder.html"><i class="fas fa-truck-fast"></i> Manage Orders</a>
+      <a href="19_myincome.html" class="active"><i class="fas fa-sack-dollar"></i> My Income</a>
     </div>
 
     <div class="main-content">
-      <h4>Total Income </h4>
-      <div class="product-list" id="order-container">
+      <div class="page-eyebrow">Earnings</div>
+      <div class="page-title">My Income</div>
+      <div class="page-sub">Revenue generated from orders that have been delivered.</div>
 
+      <div class="month-filter" id="monthFilter" style="display:none;">
+        <label for="monthSelect"><i class="fas fa-calendar-days"></i> Filter by month</label>
+        <select id="monthSelect"></select>
       </div>
-      <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
+
+      <div class="stat-grid" id="statGrid" style="display:none;">
+        <div class="stat-card">
+          <div class="stat-icon gold"><i class="fas fa-sack-dollar"></i></div>
+          <div>
+            <div class="stat-label">Total Income</div>
+            <div class="stat-value" id="statIncome">Rs 0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon success"><i class="fas fa-box-check"></i></div>
+          <div>
+            <div class="stat-label">Delivered Orders</div>
+            <div class="stat-value" id="statOrders">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon info"><i class="fas fa-cubes"></i></div>
+          <div>
+            <div class="stat-label">Items Sold</div>
+            <div class="stat-value" id="statItems">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-heading" id="sectionHeading" style="display:none;">
+        <i class="fas fa-receipt"></i> Delivered Orders
+      </div>
+
+      <div class="order-list" id="orderList">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
     </div>
 
   </div>
- <script>
-  const content = document.querySelector(".product-list");
-  const alertBox = document.getElementById("responseMessage");
 
-  fetch(`http://localhost:8000/admin/getorder`)
-    .then(async res => {
-      if (!res.ok) {
-        const text = await res.json();
-        alertBox.innerHTML = `<h5>${text.err}</h5>`;
-        alertBox.style.color = 'red';
-        return;
-      }
-      return res.json();
-    })
-    .then(data => {
-      let totalIncome = 0;
+  <script>
+    // ── Admin auth guard ──
+    const adminEmail = localStorage.getItem("adminEmail");
+    if (!adminEmail) {
+      window.location.href = "1_Signin.html";
+    } else {
+      const label = document.getElementById("adminEmailLabel");
+      label.textContent = adminEmail;
+      label.style.display = "inline";
+    }
 
-      // ✅ only delivered orders
-      const deliveredOrders = data.filter(order => order.status === "delivered");
-
-      if (deliveredOrders.length === 0) {
-        content.innerHTML = `<h5 class="text-center">No delivered orders yet.</h5>`;
-        return;
-      }
-
-      deliveredOrders.forEach(order => {
-        const listing = document.createElement("div");
-        listing.classList.add("product-row");
-
-        // order header
-        let html = `
-          <div class="w-100 mb-3">
-            <h5>Order #${order.order_id} - 
-              <span class="badge bg-success">${order.status}</span>
-            </h5>
-          </div>
-        `;
-
-        // items inside the order
-        order.items.forEach(item => {
-          const subtotal = item.price * item.quantity;
-          totalIncome += subtotal;
-
-          html += `
-            <div class="d-flex align-items-center mb-3 w-100">
-              <img src="http://localhost:8000/photos/${item.image_path}" alt="${item.title}">
-              <div class="product-details ms-3">
-                <h6>${item.title}</h6>
-                <p><strong>Brand:</strong> ${item.brand || "N/A"}</p>
-                <p><strong>Qty:</strong> ${item.quantity}</p>
-                <p><strong>Price:</strong> Rs. ${item.price}</p>
-                <p><strong>Subtotal:</strong> Rs. ${subtotal}</p>
-              </div>
-            </div>
-          `;
-        });
-
-        listing.innerHTML = html;
-        content.appendChild(listing);
-      });
-
-      const incomeSummary = document.createElement("div");
-      incomeSummary.classList.add("product-row");
-      incomeSummary.style.justifyContent = "center";
-      incomeSummary.innerHTML = `
-        <div class="product-details" style="text-align:center;">
-          <h6 style="color: green;">Total Income from Delivered Orders: 
-            <span style="font-size: 1.3rem;">Rs. ${totalIncome}</span>
-          </h6>
-        </div>
-      `;
-      content.appendChild(incomeSummary);
-    })
-    .catch(err => {
-      alertBox.innerHTML = `<h5>${err.message}</h5>`;
-      alertBox.style.color = 'red';
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("adminEmail");
+      window.location.href = "2_homepage.html";
     });
 
-  document.getElementById("logout").addEventListener("click", (e) => {
-    e.preventDefault();
-    localStorage.removeItem("adminEmail");
-    window.location.href = '2_homepage.html';
-  });
-</script>
+    document.getElementById("sidebarToggler").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("open");
+    });
+
+    function escapeHtml(str) {
+      return String(str ?? "").replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[c]));
+    }
+
+    const API_BASE = "http://localhost:8000";
+    const orderList = document.getElementById("orderList");
+    const statGrid = document.getElementById("statGrid");
+    const sectionHeading = document.getElementById("sectionHeading");
+    const monthFilter = document.getElementById("monthFilter");
+    const monthSelect = document.getElementById("monthSelect");
+
+    const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+    function renderState({ icon, title, desc, error = false }) {
+      orderList.innerHTML = `
+        <div class="state-block ${error ? "error" : ""}">
+          <div class="state-icon"><i class="fas ${icon}"></i></div>
+          <div class="state-title">${title}</div>
+          <div class="state-desc">${desc}</div>
+        </div>
+      `;
+    }
+
+    // "2026-07" -> "July 2026". Falls back to the raw key if it can't be parsed.
+    function monthLabel(monthKey) {
+      const [year, month] = monthKey.split("-").map(Number);
+      if (!year || !month) return monthKey;
+      return `${MONTH_NAMES[month - 1]} ${year}`;
+    }
+
+    function orderCardHTML(order) {
+      const items = order.items || [];
+      const orderTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      const itemsHTML = items.map(item => `
+        <div class="order-item">
+          <img src="${API_BASE}/photos/${item.image_path}" alt="${escapeHtml(item.title)}" loading="lazy" />
+          <div>
+            <div class="order-item-title">${escapeHtml(item.title)}</div>
+            <div class="order-item-meta">Qty ${item.quantity} &middot; Rs ${Number(item.price).toLocaleString()}</div>
+          </div>
+        </div>
+      `).join("");
+
+      return `
+        <div class="order-card">
+          <div class="order-head">
+            <div class="order-id">Order #${escapeHtml(order.order_id)}</div>
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div class="order-subtotal">Subtotal <strong>Rs ${orderTotal.toLocaleString()}</strong></div>
+              <div class="status-pill">${escapeHtml(order.status)}</div>
+            </div>
+          </div>
+          ${itemsHTML}
+        </div>
+      `;
+    }
+
+    function computeStats(orders) {
+      let totalIncome = 0;
+      let totalItems = 0;
+      orders.forEach(order => {
+        (order.items || []).forEach(item => {
+          totalIncome += item.price * item.quantity;
+          totalItems += item.quantity;
+        });
+      });
+      return { totalIncome, totalItems, totalOrders: orders.length };
+    }
+
+    function renderStats({ totalIncome, totalItems, totalOrders }) {
+      document.getElementById("statIncome").textContent = `Rs ${totalIncome.toLocaleString()}`;
+      document.getElementById("statOrders").textContent = totalOrders.toLocaleString();
+      document.getElementById("statItems").textContent = totalItems.toLocaleString();
+    }
+
+    // Renders either a flat list (single month selected) or grouped-by-month
+    // sections with subtotals (All Time selected).
+    function renderOrders(ordersByMonth, selectedMonth) {
+      if (selectedMonth !== "all") {
+        const orders = ordersByMonth.get(selectedMonth) || [];
+        orderList.innerHTML = orders.map(orderCardHTML).join("");
+        return;
+      }
+
+      const sortedMonths = [...ordersByMonth.keys()].sort().reverse();
+      orderList.innerHTML = sortedMonths.map(monthKey => {
+        const orders = ordersByMonth.get(monthKey);
+        const { totalIncome } = computeStats(orders);
+        return `
+          <div class="month-group-header">
+            <div class="month-group-title"><i class="fas fa-calendar-days"></i> ${escapeHtml(monthLabel(monthKey))}</div>
+            <div class="month-group-total">${orders.length} order${orders.length === 1 ? "" : "s"} &middot; <strong>Rs ${totalIncome.toLocaleString()}</strong></div>
+          </div>
+          ${orders.map(orderCardHTML).join("")}
+        `;
+      }).join("");
+    }
+
+    fetch(`${API_BASE}/admin/getorder`)
+      .then(async res => {
+        // Read the body exactly once, whether the request succeeded or not.
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.err || data.Error || "Failed to load income data.");
+        return data;
+      })
+      .then(data => {
+        const deliveredOrders = (Array.isArray(data) ? data : []).filter(o => o.status === "delivered");
+
+        if (!deliveredOrders.length) {
+          renderState({
+            icon: "fa-circle-info",
+            title: "No delivered orders yet",
+            desc: "Income will show up here once orders are marked delivered."
+          });
+          return;
+        }
+
+        // Group orders by "YYYY-MM" derived from order_date. Orders with a
+        // missing/unparseable date fall into an "Unknown" bucket instead of
+        // being silently dropped.
+        const ordersByMonth = new Map();
+        deliveredOrders.forEach(order => {
+          const parsed = order.order_date ? new Date(order.order_date) : null;
+          const monthKey = parsed && !isNaN(parsed)
+            ? `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, "0")}`
+            : "unknown";
+
+          if (!ordersByMonth.has(monthKey)) ordersByMonth.set(monthKey, []);
+          ordersByMonth.get(monthKey).push(order);
+        });
+
+        // Populate the month dropdown, most recent first.
+        const sortedMonths = [...ordersByMonth.keys()].sort().reverse();
+        monthSelect.innerHTML = `<option value="all">All Time</option>` + sortedMonths.map(monthKey => {
+          const label = monthKey === "unknown" ? "Unknown Date" : monthLabel(monthKey);
+          return `<option value="${monthKey}">${escapeHtml(label)}</option>`;
+        }).join("");
+
+        function refresh() {
+          const selected = monthSelect.value;
+          const relevantOrders = selected === "all" ? deliveredOrders : (ordersByMonth.get(selected) || []);
+          renderStats(computeStats(relevantOrders));
+          renderOrders(ordersByMonth, selected);
+        }
+
+        monthSelect.addEventListener("change", refresh);
+
+        monthFilter.style.display = "flex";
+        statGrid.style.display = "grid";
+        sectionHeading.style.display = "flex";
+        refresh();
+      })
+      .catch(err => {
+        renderState({
+          icon: "fa-triangle-exclamation",
+          title: "Something went wrong",
+          desc: err.message || "Please try again in a moment.",
+          error: true
+        });
+      });
+  </script>
 
 </body>
-
 </html>

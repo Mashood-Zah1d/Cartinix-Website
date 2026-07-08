@@ -1,249 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Place Your Order</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Cartinix | Place Order</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.16);
+      --gold: #c9a96e;
+      --gold-l: #e2c99a;
+      --text: #ede9e0;
+      --muted: #7a7268;
+      --subtle: #3f3b35;
+      --danger: #e05555;
+      --success: #4caf7d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background: #ffffff;
-      color: #111827;
-      font-family: 'Inter', sans-serif;
-      padding: 30px;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    .order-container {
-      max-width: 700px;
-      margin: auto;
-      background: #ffffff;
-      padding: 30px;
+    /* NAV */
+    .nav {
+      height: 66px;
+      display: flex; align-items: center;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-inner {
+      width: 100%; max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-brand img {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .nav-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 2px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 7px 14px; border-radius: 6px; transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-right { display: flex; align-items: center; gap: 4px; }
+    .nav-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 7px 14px; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; border: none;
+    }
+    .nav-btn-outline {
+      background: transparent; border: 1px solid var(--border-h); color: var(--muted);
+    }
+    .nav-btn-outline:hover { color: var(--text); border-color: var(--muted); }
+    .nav-btn-gold { background: var(--gold); color: #080808; font-weight: 500; }
+    .nav-btn-gold:hover { background: var(--gold-l); }
+    .nav-cart {
+      color: var(--muted); font-size: 0.95rem;
+      padding: 7px 14px; border-radius: 6px;
+      transition: all 0.2s; text-decoration: none;
+    }
+    .nav-cart:hover { color: var(--text); background: var(--surface2); }
+
+    /* PAGE */
+    .page-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 2rem 80px;
+    }
+
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .page-eyebrow::before {
+      content: ''; width: 22px; height: 1px; background: var(--gold); opacity: 0.5;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text); line-height: 1.1;
+      margin-bottom: 48px;
+    }
+    .page-title em { font-style: italic; color: var(--gold); }
+
+    /* TWO COLUMN LAYOUT */
+    .order-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* PRODUCT SUMMARY CARD */
+    .summary-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-      border: 1px solid #e5e7eb;
+      overflow: hidden;
+      position: sticky;
+      top: 90px;
+    }
+    .summary-img {
+      width: 100%; aspect-ratio: 1;
+      object-fit: cover; display: block;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-body { padding: 22px; }
+    .summary-eyebrow {
+      font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .summary-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--text); margin-bottom: 18px;
+      line-height: 1.2;
+    }
+    .summary-rows { display: flex; flex-direction: column; gap: 0; }
+    .summary-row {
+      display: flex; justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row .lbl { color: var(--muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+    .summary-row .val { color: var(--text); }
+    .summary-row .val.gold { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; }
+
+    /* FORM CARD */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
     }
 
-    .section-title {
-      margin-bottom: 20px;
-      font-size: 1.5rem;
-      font-weight: 600;
-      border-bottom: 2px solid #111827;
-      padding-bottom: 6px;
-      color: #111827;
+    .section-eyebrow {
+      font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-eyebrow::before {
+      content: ''; width: 16px; height: 1px; background: var(--gold); opacity: 0.5;
     }
 
-    .form-control {
-      width: 100%;
-      background-color: #ffffff;
-      border: 1px solid #d1d5db;
-      color: #111827;
-      padding: 10px 12px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-    }
-
-    .form-control:focus {
-      border-color: #111827;
-      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15);
-      outline: none;
-      background: #ffffff;
-      color: #111827;
-    }
-
-    .form-control:disabled {
-      background: #f9fafb;
-      color: #9ca3af;
-      border-color: #e5e7eb;
-      cursor: not-allowed;
-    }
-
-    .btn-place-order {
-      width: 100%;
-      background-color: #111827;
-      color: #ffffff;
-      font-weight: 600;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    .btn-place-order:hover {
-      background-color: #000000;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-    }
-
-    .product-info {
-      background-color: #f9fafb;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 30px;
-      border: 1px solid #e5e7eb;
-    }
-
-    .product-info p {
-      margin: 0;
-      font-size: 15px;
-      color: #374151;
-    }
-
-    #image {
-      height: 100px;
-      width: 100px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #d1d5db;
+    .field { margin-bottom: 18px; }
+    .field label {
       display: block;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px; font-weight: 400;
+    }
+    .field input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border-h);
+      border-radius: 8px;
+      padding: 13px 16px;
+      font-size: 0.92rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.25s;
+      outline: none;
+    }
+    .field input::placeholder { color: var(--subtle); }
+    .field input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+      background: #1c1c1c;
+    }
+    .field input:disabled {
+      opacity: 0.45; cursor: not-allowed;
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+    .btn-order {
+      width: 100%;
+      background: var(--gold);
+      color: #080808;
+      border: none; border-radius: 6px;
+      padding: 15px;
+      font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: all 0.3s;
+      margin-top: 8px;
+    }
+    .btn-order:hover {
+      background: var(--gold-l);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(201,169,110,0.2);
+    }
+
+    #responseMessage {
+      min-height: 20px;
+      font-size: 0.82rem;
+      text-align: center;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+    #responseMessage.success { color: var(--success); }
+    #responseMessage.error   { color: var(--danger); }
+
+    @media (max-width: 768px) {
+      .order-grid { grid-template-columns: 1fr; }
+      .summary-card { position: static; }
+      .nav-links { display: none; }
+      .two-col { grid-template-columns: 1fr; }
+      .form-card { padding: 22px; }
     }
   </style>
-
 </head>
-
 <body>
-  <div class="order-container">
-    <h2 class="text-center mb-4">Complete Your Order</h2>
 
-
-    <div class="product-info mb-4">
-      <h5 class="section-title">Product Summary</h5>
-      <img id="image" src="">
-      <p><strong>Product Name:</strong> <span id="productName"></span></p>
-      <p><strong>SKU:</strong> <span id="productSku"></span></p>
-      <p><strong>Quantity:</strong> <span id="Stock"></span></p>
-      <p><strong>Price:</strong> <span id="productPrice"></span></p>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="2_homepage.html">
+        <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+        <span class="nav-brand-name">Cartinix</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="2_homepage.html">Home</a></li>
+        <li><a href="3_Allproducts.html">Shop</a></li>
+        <li><a href="10_about.html">About</a></li>
+        <li><a href="9_myorders.html">My Orders</a></li>
+      </ul>
+      <div class="nav-right" id="navAuth">
+        <a class="nav-cart" href="7_showcart.html" aria-label="Cart">
+          <i class="fas fa-shopping-cart"></i>
+        </a>
+      </div>
     </div>
+  </nav>
 
-    <h5 class="section-title">Customer Information</h5>
-    <form id="orderForm">
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label for="customerName" class="form-label">Full Name</label>
-          <input type="text" class="form-control" id="customerName" required>
+  <div class="page-wrap">
+    <div class="page-eyebrow">Checkout</div>
+    <div class="page-title">Complete your <em>order</em></div>
+
+    <div class="order-grid">
+
+      <!-- LEFT: PRODUCT SUMMARY -->
+      <div class="summary-card">
+        <img class="summary-img" id="productImg" src="" alt="Product" />
+        <div class="summary-body">
+          <div class="summary-eyebrow">Cartinix &mdash; Timepiece</div>
+          <div class="summary-title" id="productName">Loading...</div>
+          <div class="summary-rows">
+            <div class="summary-row">
+              <span class="lbl">SKU</span>
+              <span class="val" id="productSku">—</span>
+            </div>
+            <div class="summary-row">
+              <span class="lbl">Color</span>
+              <span class="val" id="productColor">—</span>
+            </div>
+            <div class="summary-row">
+              <span class="lbl">Stock</span>
+              <span class="val" id="productStock">—</span>
+            </div>
+            <div class="summary-row">
+              <span class="lbl">Price</span>
+              <span class="val gold" id="productPrice">—</span>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6">
-          <label for="customerEmail" class="form-label">Email</label>
-          <input type="email" class="form-control" id="customerEmail" required>
-        </div>
       </div>
 
-      <div class="mb-3">
-        <label for="customerPhone" class="form-label">Phone Number</label>
-        <input type="tel" class="form-control" id="customerPhone" required>
+      <!-- RIGHT: ORDER FORM -->
+      <div class="form-card">
+        <form id="orderForm">
+          <div class="section-eyebrow">Customer Information</div>
+
+          <div class="two-col">
+            <div class="field">
+              <label for="customerName">Full Name</label>
+              <input type="text" id="customerName" placeholder="John Doe" required />
+            </div>
+            <div class="field">
+              <label for="customerEmail">Email</label>
+              <input type="email" id="customerEmail" placeholder="you@example.com" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="customerPhone">Phone Number</label>
+            <input type="tel" id="customerPhone" placeholder="+92 300 0000000" required />
+          </div>
+
+          <div class="field">
+            <label for="customerAddress">Delivery Address</label>
+            <input type="text" id="customerAddress" placeholder="Street, City, Province" required />
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="section-eyebrow">Order Details</div>
+
+          <div class="two-col">
+            <div class="field">
+              <label for="quantity">Quantity</label>
+              <input type="number" id="quantity" placeholder="1" min="1" required />
+            </div>
+            <div class="field">
+              <label for="payment">Payment Method</label>
+              <input type="text" id="payment" value="COD" disabled />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="color">Selected Color</label>
+            <input type="text" id="color" disabled />
+          </div>
+
+          <div id="responseMessage"></div>
+
+          <button type="submit" class="btn-order">Place Order</button>
+        </form>
       </div>
 
-      <div class="mb-3">
-        <label for="customerAddress" class="form-label"> Address</label>
-        <input type="text" class="form-control" id="customerAddress" required>
-      </div>
-
-      <h5 class="section-title mt-4">Details</h5>
-      <div class="mb-3">
-        <label for="quantity" class="form-label"> Quantity</label>
-        <input type="text" class="form-control" id="quantity" required>
-      </div>
-
-      <div class="mb-3">
-        <label for="payment" class="form-label"> Payment Type</label>
-        <input type="text" class="form-control" id="payment" required>
-      </div>
-
-      <div class="mb-3">
-        <label for="color" class="form-label"> Color</label>
-        <input type="text" class="form-control" id="color" required>
-      </div>
-
-      <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
-
-      <button type="submit" class="btn-place-order" id="order">Place Order</button>
-    </form>
+    </div>
   </div>
 
-
   <script>
+    const navAuth = document.getElementById("navAuth");
+    const customerEmail = localStorage.getItem("customerEmail");
+    const adminEmail = localStorage.getItem("adminEmail");
+    const isLoggedIn = customerEmail || adminEmail;
+
+    if (isLoggedIn) {
+      navAuth.innerHTML = `
+        <a class="nav-cart" href="7_showcart.html" aria-label="Cart"><i class="fas fa-shopping-cart"></i></a>
+        <button class="nav-btn nav-btn-outline" id="logoutBtn">Logout</button>
+      `;
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.clear();
+        window.location.href = "1_Signin.html";
+      });
+    } else {
+      navAuth.innerHTML = `
+        <a class="nav-cart" href="7_showcart.html" aria-label="Cart"><i class="fas fa-shopping-cart"></i></a>
+        <a href="1_Signin.html" class="nav-btn nav-btn-outline">Login</a>
+        <a href="0_signup.html" class="nav-btn nav-btn-gold">Sign Up</a>
+      `;
+    }
+
     const productid = localStorage.getItem("productid");
     const selectedColor = localStorage.getItem("color");
-    const alert = document.getElementById("responseMessage")
+    const msgEl = document.getElementById("responseMessage");
+
+    document.getElementById("color").value = selectedColor || "—";
+
+    function showMsg(text, type) {
+      msgEl.textContent = text;
+      msgEl.className = type;
+      setTimeout(() => { msgEl.textContent = ""; msgEl.className = ""; }, 2500);
+    }
+
+    let productPrice = 0;
+    let productSku = "";
 
     fetch(`http://localhost:8000/users/product-details?productid=${productid}`)
       .then(async res => {
         if (!res.ok) {
-          const text = await res.json();
-          alert.innerHTML = `<h5>${text.err}</h5>`
+          const err = await res.json();
+          showMsg(err.Error || "Failed to load product.", "error");
           return;
         }
         return res.json();
       })
       .then(data => {
-        document.getElementById("image").src = `http://localhost:8000/photos/${data.details.image_path}`;
-        document.getElementById("productName").innerText = data.details.title;
-        document.getElementById("productSku").innerText = data.details.sku;
-        document.getElementById("Stock").innerText = data.details.stock;
-        document.getElementById("productPrice").innerText = data.details.price;
+        if (!data) return;
+        const d = data.details;
+        productPrice = parseFloat(d.price);
+        productSku = d.sku;
 
-        const paymentInput = document.getElementById("payment");
-        const colorInput = document.getElementById("color");
+        document.getElementById("productImg").src = `http://localhost:8000/photos/${data.images?.[0]?.image_path || d.image_path}`;
+        document.getElementById("productName").textContent = d.title;
+        document.getElementById("productSku").textContent = d.sku;
+        document.getElementById("productColor").textContent = selectedColor || "—";
+        document.getElementById("productStock").textContent = d.stock + " units";
+        document.getElementById("productPrice").textContent = "Rs " + Number(d.price).toLocaleString();
 
-        paymentInput.value = "COD";
-        colorInput.value = selectedColor;
-        paymentInput.disabled = true;
-        colorInput.disabled = true;
-
-        document.getElementById("orderForm").addEventListener("submit", function (e) {
+        document.getElementById("orderForm").addEventListener("submit", function(e) {
           e.preventDefault();
 
-          const name = document.getElementById("customerName").value;
-          const phone = document.getElementById("customerPhone").value;
-          const email = document.getElementById("customerEmail").value;
-          const address = document.getElementById("customerAddress").value;
+          const name     = document.getElementById("customerName").value.trim();
+          const phone    = document.getElementById("customerPhone").value.trim();
+          const email    = document.getElementById("customerEmail").value.trim();
+          const address  = document.getElementById("customerAddress").value.trim();
           const quantity = parseInt(document.getElementById("quantity").value, 10);
-          const color = selectedColor;
-          const price = parseFloat(data.details.price);
-          const sku = data.details.sku;
+          const color    = selectedColor;
 
-          fetch(`http://localhost:8000/users/buynow`, {
+          if (!name || !phone || !email || !address || !quantity || !color) {
+            showMsg("Please fill all fields and ensure a color is selected.", "error");
+            return;
+          }
+
+          fetch("http://localhost:8000/users/buynow", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, phone, email, address, quantity, color, price, sku })
+            body: JSON.stringify({
+              name, phone, email, address,
+              quantity, color,
+              price: productPrice,
+              sku: productSku
+            })
           })
-
             .then(async res => {
               if (!res.ok) {
-                const text = await res.json();
-                alert.innerHTML = `<h5>${text.message}</h5>`;
-                alert.style.color = 'red';
+                const err = await res.json();
+                showMsg(err.message || "Order failed.", "error");
                 return;
               }
               return res.json();
             })
             .then(data => {
+              if (!data) return;
               localStorage.setItem("OrderId", data.order_id);
-              alert.innerHTML = `<h5>Your Order Has been Placed</h5>`;
-              alert.style.color = 'Green';
-              setTimeout(() => {
-                window.location.href = "6_orderslip.html"
-              }, 1000);
+              showMsg("Order placed successfully!", "success");
+              setTimeout(() => window.location.href = "6_orderslip.html", 1000);
             })
-            .catch(err => {
-              alert.innerHTML = `<h5>${err.message}</h5>`;
-              alert.style.color = 'red';
-            });
+            .catch(() => showMsg("Network error. Please try again.", "error"));
         });
       })
-      .catch(err => {
-        alert.innerHTML = `<h5>${err.message}</h5>`;
-        alert.style.color = 'red';
-      });
-
-
+      .catch(() => showMsg("Failed to load product details.", "error"));
   </script>
 </body>
-
 </html>

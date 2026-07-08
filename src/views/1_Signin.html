@@ -1,254 +1,399 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Signin</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display&display=swap"
-    rel="stylesheet">
+  <title>Cartinix | Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.16);
+      --gold: #c9a96e;
+      --gold-l: #e2c99a;
+      --text: #ede9e0;
+      --muted: #7a7268;
+      --subtle: #3f3b35;
+      --danger: #e05555;
+      --success: #4caf7d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: "Inter", sans-serif;
-      background: #ffffff;
-      color: #111827;
-      margin: 0;
-      padding: 0;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    .navbar {
-      background: #ffffff;
-      height: 70px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      padding: 0.6rem 1rem;
-      border-bottom: 1px solid #e5e7eb;
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
     }
 
-    .navbar .nav-link {
-      color: #111827 !important;
-      font-weight: 500;
-      margin-left: 10px;
-      padding: 6px 12px;
-      transition: all 0.3s ease;
-      border-radius: 8px;
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      position: relative;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 3rem;
+    }
+    .left-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.pexels.com/photos/9979950/pexels-photo-9979950.jpeg') center/cover no-repeat;
+    }
+    .left-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.5) 50%, rgba(8,8,8,0.2) 100%);
+    }
+    .left-content { position: relative; z-index: 1; }
+    .left-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+      position: absolute; top: 2.5rem; left: 3rem; z-index: 1;
+    }
+    .left-brand img {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .left-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
+    }
+    .left-tag {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.65rem; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .left-tag::before {
+      content: ''; width: 22px; height: 1px; background: var(--gold); opacity: 0.6;
+    }
+    .left-panel h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem; font-weight: 700;
+      color: var(--text); line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 14px;
+    }
+    .left-panel h2 em { font-style: italic; color: var(--gold); }
+    .left-panel p {
+      font-size: 0.83rem; color: var(--muted);
+      line-height: 1.85; max-width: 300px;
+      font-weight: 300;
     }
 
-    .navbar .nav-link.active {
-      background: #f3f4f6;
-      color: #000000 !important;
+    /* ── RIGHT PANEL (FORM) ── */
+    .right-panel {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2.5rem;
+    }
+    .form-box {
+      width: 100%; max-width: 400px;
     }
 
-    .navbar .nav-link:hover {
-      background: #111827;
-      color: #ffffff !important;
-      transform: translateY(-1px);
+    .form-brand {
+      display: none;
+      align-items: center; gap: 10px;
+      text-decoration: none;
+      margin-bottom: 2.5rem;
+    }
+    .form-brand img {
+      width: 32px; height: 32px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .form-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
     }
 
-    .signin-container {
-      max-width: 450px;
-      width: 100%;
-      margin: 40px auto;
-      background: #ffffff;
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-      border: 1px solid #e5e7eb;
+    .form-eyebrow {
+      font-size: 0.65rem; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .form-eyebrow::before {
+      content: ''; width: 20px; height: 1px; background: var(--gold); opacity: 0.5;
     }
 
     .form-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 25px;
-      color: #111827;
-      letter-spacing: 0.5px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; font-weight: 700;
+      color: var(--text); letter-spacing: -0.02em;
+      margin-bottom: 2rem; line-height: 1.1;
     }
 
-    .logo {
-      height: 65px;
-    }
+    /* ── FORM FIELDS ── */
+    .field { margin-bottom: 1.25rem; }
 
-    label {
-      color: #374151;
-      font-weight: 600;
-      margin-bottom: 8px;
+    .field label {
       display: block;
-      font-size: 0.95rem;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px; font-weight: 400;
     }
 
-    .form-control {
-      border-radius: 8px;
-      padding: 12px 14px;
-      font-size: 1rem;
-      background: #ffffff;
-      color: #111827;
-      border: 1px solid #d1d5db;
-      transition: all 0.3s ease;
+    .field input,
+    .field select {
       width: 100%;
-      box-sizing: border-box;
-    }
-
-    .form-control:focus {
+      background: var(--surface2);
+      border: 1px solid var(--border-h);
+      border-radius: 8px;
+      padding: 13px 16px;
+      font-size: 0.92rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.25s;
       outline: none;
-      border-color: #111827;
-      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.1);
+      appearance: none;
+      -webkit-appearance: none;
     }
 
-    .form-control::placeholder {
-      color: #9ca3af;
+    .field input::placeholder { color: var(--subtle); }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+      background: #1c1c1c;
     }
 
-    .btn-submit,
-    #signup {
-      background: #111827;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
+    .field input:disabled,
+    .field select:disabled {
+      opacity: 0.4; cursor: not-allowed;
+    }
+
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '\f078';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute; right: 16px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted); font-size: 0.7rem;
+      pointer-events: none;
+    }
+
+    .field select option {
+      background: #1a1a1a;
+      color: var(--text);
+    }
+
+    /* ── BUTTONS ── */
+    .btn-signin {
       width: 100%;
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
+      background: var(--gold);
+      color: #080808;
+      border: none; border-radius: 6px;
+      padding: 14px;
+      font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: all 0.3s;
+      margin-top: 0.5rem;
+    }
+    .btn-signin:hover {
+      background: var(--gold-l);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(201,169,110,0.2);
+    }
+    .btn-signin:disabled {
+      opacity: 0.6; cursor: not-allowed;
+      transform: none; box-shadow: none;
     }
 
-    .btn-submit:hover,
-    #signup:hover {
-      background: #000000;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    /* ── MESSAGE ── */
+    #responseMessage {
+      min-height: 24px;
+      font-size: 0.82rem;
+      text-align: center;
+      margin: 1rem 0 0.25rem;
+      border-radius: 6px;
+      padding: 0 4px;
+      transition: all 0.3s;
     }
+    #responseMessage.success { color: var(--success); }
+    #responseMessage.error   { color: var(--danger); }
 
-    input.form-control:disabled,
-    select.form-select:disabled {
-      background-color: #f3f4f6 !important;
-      color: #6b7280 !important;
-      border: 1px solid #d1d5db !important;
-      opacity: 1 !important;
-      cursor: not-allowed !important;
+    .signup-hint {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .signup-hint a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .signup-hint a:hover { text-decoration: underline; }
+
+    /* ── ALREADY LOGGED IN NOTICE ── */
+    .already-in {
+      text-align: center;
+      padding: 20px;
+      border: 1px dashed var(--border-h);
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .already-in p { font-size: 0.85rem; color: var(--muted); margin-bottom: 14px; }
+    .already-in .btn-signin { margin-top: 0; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .page-wrap { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .right-panel { border-left: none; padding: 2rem 1.5rem; }
+      .form-brand { display: flex; }
     }
   </style>
 </head>
-
 <body>
 
-  <nav class="navbar navbar-expand-lg shadow-sm">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="2_homepage.html">
-        <img class="logo" src="http://localhost:8000/photos/logo.jpg" alt="Cartinix Logo" class="logo-img me-2" />
+  <div class="page-wrap">
+
+    <!-- LEFT: Brand Panel -->
+    <div class="left-panel">
+      <div class="left-bg"></div>
+      <a class="left-brand" href="2_homepage.html">
+        <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+        <span class="left-brand-name">Cartinix</span>
       </a>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-          <li class="nav-item"><a class="nav-link " href="2_homepage.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="3_Allproducts.html">Shop</a></li>
-          <li class="nav-item"><a class="nav-link" href="10_about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="9_myorders.html">My Orders</a></li>
-          <li class="nav-item"><a class="nav-link" href="1_Signin.html">Login/Signup</a></li>
-          <li class="nav-item">
-            <a class="nav-link position-relative" href="7_showcart.html">
-              <i class="fas fa-shopping-cart"></i>
-            </a>
-          </li>
-        </ul>
+      <div class="left-content">
+        <div class="left-tag">Welcome Back</div>
+        <h2>Time is<br>your most<br><em>precious</em><br>asset</h2>
+        <p>Sign in to your Cartinix account and continue exploring our curated collection of luxury timepieces.</p>
       </div>
     </div>
-  </nav>
 
-  <div class="signin-container">
-    <div class="form-title">Sign-In</div>
-    <form id="adminSigninForm">
-      <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
-        <input type="email" class="form-control" name="email" id="email" required autocomplete="email"/>
+    <!-- RIGHT: Form Panel -->
+    <div class="right-panel">
+      <div class="form-box">
+        <a class="form-brand" href="2_homepage.html">
+          <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+          <span class="form-brand-name">Cartinix</span>
+        </a>
+
+        <div class="form-eyebrow">Account Access</div>
+        <div class="form-title">Sign In</div>
+
+        <div id="alreadyInBlock" style="display:none;" class="already-in">
+          <p>You're already signed in.</p>
+          <button type="button" class="btn-signin" id="continueBtn">Continue to Cartinix</button>
+        </div>
+
+        <form id="signinForm" autocomplete="off">
+          <div class="field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password" />
+          </div>
+
+          <div class="field">
+            <label for="role">Role</label>
+            <div class="select-wrap">
+              <select id="role" required>
+                <option value="" disabled selected>Select your role</option>
+                <option value="admin">Admin</option>
+                <option value="customer">Customer</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="responseMessage"></div>
+
+          <button type="submit" class="btn-signin" id="submitBtn">Sign In</button>
+        </form>
+
+        <p class="signup-hint">New to Cartinix? <a href="0_signup.html">Create an account</a></p>
       </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" name="password" id="password"
-          required autocomplete="new-password" />
-      </div>
-      <div class="mb-3">
-        <label for="role" class="form-label">Select Role</label>
-        <select class="form-select" id="role" required>
-          <option value="" disabled selected>Select your role</option>
-          <option value="admin">Admin</option>
-          <option value="customer">Customer</option>
-        </select>
-      </div>
-      <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
-      <button type="submit" class="btn-submit mt-3">Sign In</button>
-      <button type="button" id="signup" class="mt-3">Create Account</button>
-    </form>
+    </div>
+
   </div>
 
   <script>
-    const form = document.getElementById("adminSigninForm");
-    const alert = document.getElementById("responseMessage");
-    const customer = localStorage.getItem("customerEmail");
-    const admin = localStorage.getItem("adminEmail");
+    const form = document.getElementById("signinForm");
+    const msg = document.getElementById("responseMessage");
+    const submitBtn = document.getElementById("submitBtn");
+    const alreadyInBlock = document.getElementById("alreadyInBlock");
 
-    if (customer || admin) {
-      document.getElementById("email").disabled = true;
-      document.getElementById("password").disabled = true;
-      document.getElementById("role").disabled = true;
+    const customerEmail = localStorage.getItem("customerEmail");
+    const adminEmail = localStorage.getItem("adminEmail");
+
+    // If already signed in, don't make the person re-enter credentials —
+    // offer a clear way forward instead of just greying out the form.
+    if (customerEmail || adminEmail) {
+      form.style.display = "none";
+      alreadyInBlock.style.display = "block";
+      document.getElementById("continueBtn").addEventListener("click", () => {
+        window.location.href = adminEmail ? "11_admin.html" : "2_homepage.html";
+      });
+    }
+
+    function showMsg(text, type) {
+      msg.textContent = text;
+      msg.className = type;
     }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
+
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const role = document.getElementById("role").value;
 
-      const endpoint =
-        role === "admin"
-          ? "http://localhost:8000/admin/adminSignin"
-          : "http://localhost:8000/users/customerSignin";
-        
-          console.log(endpoint);
-          
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      })
-        .then(async res =>{
-          const data = await res.json();
-          if (!res.ok){
-            throw Error (data.error)
-          }
-           return data;
-        }
-        )
-        .then(data => {
-          alert.innerHTML = `<h5>${data.message}</h5>`;
-          alert.style.color = "green";
+      if (!email || !password || !role) {
+        showMsg("Please fill in all fields.", "error");
+        return;
+      }
 
-          if (role === "admin") {
-           localStorage.setItem("adminEmail", email);
-            setTimeout(() => {
-              window.location.href = "11_admin.html";
-            }, 1000);
-          } else {
-            localStorage.setItem("customerEmail", email);
-            setTimeout(() => {
-              window.location.href = "2_homepage.html";
-            }, 1000);
-          }
-        })
-        .catch(error => {
-          alert.innerHTML = `<h5>${error.message}</h5>`;
-          alert.style.color = "red";
+      const endpoint = role === "admin"
+        ? "http://localhost:8000/admin/adminSignin"
+        : "http://localhost:8000/users/customerSignin";
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Signing In...";
+
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
         });
-    });
+        const data = await res.json().catch(() => ({}));
 
-    document.getElementById("signup").addEventListener("click", (e) => {
-      e.preventDefault();
-      window.location.href = "0_signup.html";
+        if (!res.ok) throw new Error(data.error || data.message || "Sign in failed. Please try again.");
+
+        showMsg(data.message || "Signed in successfully.", "success");
+
+        if (role === "admin") {
+          localStorage.setItem("adminEmail", email);
+          setTimeout(() => window.location.href = "11_admin.html", 1000);
+        } else {
+          localStorage.setItem("customerEmail", email);
+          setTimeout(() => window.location.href = "2_homepage.html", 1000);
+        }
+      } catch (err) {
+        showMsg(err.message, "error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Sign In";
+      }
     });
   </script>
 </body>

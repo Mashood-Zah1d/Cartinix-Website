@@ -1,175 +1,406 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Order Slip</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cartinix | Order Confirmed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.16);
+      --gold: #c9a96e;
+      --gold-l: #e2c99a;
+      --text: #ede9e0;
+      --muted: #7a7268;
+      --subtle: #3f3b35;
+      --danger: #e05555;
+      --success: #4caf7d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background: #ffffff;
-      color: #111827;
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    .slip-container {
-      max-width: 700px;
-      margin: 50px auto;
-      background: #fff;
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* NAV */
+    .nav {
+      height: 66px; display: flex; align-items: center;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-inner {
+      width: 100%; max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-brand img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold); }
+    .nav-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem; font-weight: 700; color: var(--gold); letter-spacing: 0.05em;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 7px 14px; border-radius: 6px; transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-right { display: flex; align-items: center; gap: 4px; }
+    .nav-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 7px 14px; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s; text-decoration: none; border: none;
+    }
+    .nav-btn-outline { background: transparent; border: 1px solid var(--border-h); color: var(--muted); }
+    .nav-btn-outline:hover { color: var(--text); border-color: var(--muted); }
+    .nav-btn-gold { background: var(--gold); color: #080808; font-weight: 500; }
+    .nav-btn-gold:hover { background: var(--gold-l); }
+    .nav-cart { color: var(--muted); font-size: 0.95rem; padding: 7px 14px; border-radius: 6px; transition: all 0.2s; text-decoration: none; }
+    .nav-cart:hover { color: var(--text); background: var(--surface2); }
+
+    /* PAGE */
+    .page-wrap {
+      max-width: 780px; margin: 0 auto; padding: 60px 2rem 80px;
     }
 
-    .header {
+    /* SUCCESS HEADER */
+    .success-header {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 48px;
+    }
+    .success-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(76,175,124,0.12);
+      border: 1px solid rgba(76,175,124,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 1.4rem; color: var(--success);
+    }
+    .success-tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 14px;
+    }
+    .success-tag::before, .success-tag::after {
+      content: ''; width: 22px; height: 1px; background: var(--gold); opacity: 0.5;
+    }
+    .success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 700;
+      letter-spacing: -0.02em; color: var(--text); line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .success-title em { font-style: italic; color: var(--gold); }
+    .success-sub {
+      font-size: 0.88rem; color: var(--muted); font-weight: 300; line-height: 1.8;
     }
 
-    .header h2 {
-      font-weight: 600;
-      color: #111827;
+    /* ORDER ID BADGE */
+    .order-id-badge {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface2);
+      border: 1px solid var(--border-h);
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin-bottom: 28px;
+    }
+    .order-id-label {
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    }
+    .order-id-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 600; color: var(--gold); letter-spacing: 0.04em;
     }
 
-    .order-details,
-    .customer-details {
+    /* CARDS */
+    .slip-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
       margin-bottom: 20px;
     }
+    .card-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .card-header::before { content: ''; width: 14px; height: 1px; background: var(--gold); opacity: 0.5; }
+    .card-body { padding: 22px 24px; }
 
-    .product-img {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-      border-radius: 8px;
-      margin-right: 15px;
+    /* CUSTOMER DETAILS */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .detail-item {}
+    .detail-item .lbl {
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 4px;
+    }
+    .detail-item .val {
+      font-size: 0.92rem; color: var(--text);
     }
 
-    .detail-label {
-      font-weight: 500;
-      color: #555;
+    /* PRODUCT ITEMS */
+    .product-item {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .product-item:last-child { border-bottom: none; }
+    .product-item-img {
+      width: 72px; height: 72px;
+      object-fit: cover; border-radius: 8px;
+      border: 1px solid var(--border-h); display: block;
+    }
+    .product-item-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 4px;
+    }
+    .product-item-meta {
+      font-size: 0.78rem; color: var(--muted); display: flex; flex-direction: column; gap: 2px;
+    }
+    .product-item-badge {
+      display: inline-flex;
+      background: rgba(201,169,110,0.1);
+      border: 1px solid rgba(201,169,110,0.2);
+      color: var(--gold);
+      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 4px;
+      white-space: nowrap;
     }
 
-    .detail-value {
-      font-weight: 600;
-      color: #111827;
+    /* MSG */
+    #responseMessage {
+      font-size: 0.82rem; text-align: center;
+      margin-bottom: 20px; border-radius: 6px; min-height: 20px;
     }
+    #responseMessage.error { color: var(--danger); }
+    #responseMessage.success { color: var(--success); }
 
-    .line {
-      height: 1px;
-      background: #ccc;
-      margin: 25px 0;
+    /* ACTION BUTTONS */
+    .action-row {
+      display: flex; gap: 12px; margin-top: 28px;
     }
-
-    .thanks-msg {
-      text-align: center;
-      font-weight: 500;
-      color: #444;
+    .btn-primary {
+      flex: 1; background: var(--gold); color: #080808;
+      border: none; border-radius: 6px; padding: 14px;
+      font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.3s;
+      text-decoration: none; display: flex; align-items: center; justify-content: center;
     }
-
-    button {
-      background: #111827;
-      color: #fff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background 0.3s ease, transform 0.2s ease;
+    .btn-primary:hover { background: var(--gold-l); transform: translateY(-1px); box-shadow: 0 10px 28px rgba(201,169,110,0.2); }
+    .btn-secondary {
+      flex: 1; background: transparent; color: var(--muted);
+      border: 1px solid var(--border-h); border-radius: 6px; padding: 14px;
+      font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.25s;
+      text-decoration: none; display: flex; align-items: center; justify-content: center;
     }
+    .btn-secondary:hover { color: var(--text); border-color: var(--muted); }
 
-    button:hover {
-      background: #333;
-      transform: translateY(-2px);
+    /* FOOTER NOTE */
+    .footer-note {
+      text-align: center; margin-top: 32px;
+      font-size: 0.82rem; color: var(--muted); font-weight: 300; line-height: 1.9;
+    }
+    .footer-note strong { color: var(--gold); font-weight: 400; }
+
+    @media (max-width: 600px) {
+      .detail-grid { grid-template-columns: 1fr; }
+      .product-item { grid-template-columns: 60px 1fr; }
+      .product-item-badge { grid-column: 1 / -1; }
+      .action-row { flex-direction: column; }
+      .nav-links { display: none; }
     }
   </style>
 </head>
-
 <body>
 
-  <div class="slip-container">
-    <div class="header">
-      <h2>Order Confirmation</h2>
-      <p>Thank you for your purchase!</p>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="2_homepage.html">
+        <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+        <span class="nav-brand-name">Cartinix</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="2_homepage.html">Home</a></li>
+        <li><a href="3_Allproducts.html">Shop</a></li>
+        <li><a href="10_about.html">About</a></li>
+        <li><a href="9_myorders.html">My Orders</a></li>
+      </ul>
+      <div class="nav-right" id="navAuth">
+        <a class="nav-cart" href="7_showcart.html" aria-label="Cart">
+          <i class="fas fa-shopping-cart"></i>
+        </a>
+      </div>
     </div>
-    <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
-    <h5><span class="detail-label">Order ID:</span> <span class="detail-value" id="orderid"> </span></h5>
+  </nav>
 
-    <div class="customer-details">
-      <h5 class="mb-3">Customer Details</h5>
-      <p><span class="detail-label">Name:</span> <span class="detail-value" id="cust-name"></span></p>
-      <p><span class="detail-label">Email:</span> <span class="detail-value" id="cust-email"></span></p>
-      <p><span class="detail-label">Phone:</span> <span class="detail-value" id="cust-phone"></span></p>
-      <p><span class="detail-label">Address:</span> <span class="detail-value" id="cust-address"></span></p>
+  <div class="page-wrap">
+
+    <!-- SUCCESS HEADER -->
+    <div class="success-header">
+      <div class="success-icon">
+        <i class="fas fa-check"></i>
+      </div>
+      <div class="success-tag">Order Confirmed</div>
+      <div class="success-title">Your order is<br><em>on its way</em></div>
+      <p class="success-sub">Thank you for shopping with Cartinix. We'll be in touch shortly.</p>
     </div>
 
-    <div class="line"></div>
+    <div id="responseMessage"></div>
 
-    <div class="order-details" id="order-details-container">
+    <!-- ORDER ID -->
+    <div class="order-id-badge">
+      <span class="order-id-label">Order ID</span>
+      <span class="order-id-value" id="orderid">—</span>
     </div>
 
-    <div class="line"></div>
-
-    <div class="thanks-msg">
-      <p>Your order has been placed successfully. We’ll contact you soon!</p>
+    <!-- CUSTOMER DETAILS -->
+    <div class="slip-card">
+      <div class="card-header">Customer Details</div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="lbl">Full Name</div>
+            <div class="val" id="cust-name">—</div>
+          </div>
+          <div class="detail-item">
+            <div class="lbl">Email</div>
+            <div class="val" id="cust-email">—</div>
+          </div>
+          <div class="detail-item">
+            <div class="lbl">Phone</div>
+            <div class="val" id="cust-phone">—</div>
+          </div>
+          <div class="detail-item">
+            <div class="lbl">Delivery Address</div>
+            <div class="val" id="cust-address">—</div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- ORDER ITEMS -->
+    <div class="slip-card">
+      <div class="card-header">Items Ordered</div>
+      <div class="card-body" id="order-details-container">
+        <div style="font-size:0.82rem;color:var(--muted);text-align:center;padding:20px 0;letter-spacing:0.1em;text-transform:uppercase;">Loading items...</div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="action-row">
+      <a class="btn-primary" href="3_Allproducts.html">Continue Shopping</a>
+      <a class="btn-secondary" href="9_myorders.html">View My Orders</a>
+    </div>
+
+    <!-- FOOTER NOTE -->
+    <div class="footer-note">
+      <p>Questions about your order? Email us at <strong>support@cartinix.com</strong><br>We typically respond within 24 hours.</p>
+    </div>
+
   </div>
 
   <script>
-    const alert = document.getElementById("responseMessage");
+    const navAuth = document.getElementById("navAuth");
+    const customerEmail = localStorage.getItem("customerEmail");
+    const adminEmail = localStorage.getItem("adminEmail");
+    const isLoggedIn = customerEmail || adminEmail;
+
+    if (isLoggedIn) {
+      navAuth.innerHTML = `
+        <a class="nav-cart" href="7_showcart.html" aria-label="Cart"><i class="fas fa-shopping-cart"></i></a>
+        <button class="nav-btn nav-btn-outline" id="logoutBtn">Logout</button>
+      `;
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.clear();
+        window.location.href = "1_Signin.html";
+      });
+    } else {
+      navAuth.innerHTML = `
+        <a class="nav-cart" href="7_showcart.html" aria-label="Cart"><i class="fas fa-shopping-cart"></i></a>
+        <a href="1_Signin.html" class="nav-btn nav-btn-outline">Login</a>
+        <a href="0_signup.html" class="nav-btn nav-btn-gold">Sign Up</a>
+      `;
+    }
+
+    const msgEl = document.getElementById("responseMessage");
+
+    function showMsg(text, type) {
+      msgEl.textContent = text;
+      msgEl.className = type;
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       const orderId = localStorage.getItem("OrderId");
-
       if (!orderId) {
-        alert.innerHTML = `<p>No Order ID found.</p>`
-        alert.style.color = 'red';
+        showMsg("No order ID found. Please complete a purchase first.", "error");
         return;
       }
 
       fetch(`http://localhost:8000/users/orderslip?orderid=${orderId}`)
         .then(async res => {
-          if (!res.ok) {
-            const text = await res.json();
-            alert.innerHTML = `<h5>Error fetching order data.</h5>`
-            alert.style.color = 'red';
-            return;
-          }
+          if (!res.ok) { const e = await res.json(); throw new Error(e.Error || "Failed to load order"); }
           return res.json();
         })
         .then(data => {
-          document.getElementById("orderid").innerText = data[0].order_id;
-          document.getElementById("cust-name").innerText = data[0].customer_name;
-          document.getElementById("cust-email").innerText = data[0].customer_email;
-          document.getElementById("cust-phone").innerText = data[0].customer_phone;
-          document.getElementById("cust-address").innerText = data[0].customer_address;
+          if (!data || !data.length) { showMsg("Order not found.", "error"); return; }
+
+          const first = data[0];
+          document.getElementById("orderid").textContent = first.order_id;
+          document.getElementById("cust-name").textContent = first.customer_name;
+          document.getElementById("cust-email").textContent = first.customer_email;
+          document.getElementById("cust-phone").textContent = first.customer_phone;
+          document.getElementById("cust-address").textContent = first.customer_address;
 
           const container = document.getElementById("order-details-container");
+          container.innerHTML = "";
 
           data.forEach(product => {
             const div = document.createElement("div");
-            div.className = "d-flex align-items-start mb-3";
-
+            div.className = "product-item";
             div.innerHTML = `
-            <img src="http://localhost:8000/photos/${product.image_path}" class="product-img" alt="Product Image">
-            <div>
-              <p><span class="detail-label">Product:</span> <span class="detail-value">${product.title}</span></p>
-              <p><span class="detail-label">Color:</span> <span class="detail-value">${product.color}</span></p>
-              <p><span class="detail-label">Quantity:</span> <span class="detail-value">${product.quantity}</span></p>
-              <p><span class="detail-label">Payment:</span> <span class="detail-value">${product.payment_method}</span></p>
-            </div>
-          `;
+              <img class="product-item-img" src="http://localhost:8000/photos/${product.image_path}" alt="${product.title}" />
+              <div>
+                <div class="product-item-name">${product.title}</div>
+                <div class="product-item-meta">
+                  <span>Color: ${product.color}</span>
+                  <span>Qty: ${product.quantity}</span>
+                </div>
+              </div>
+              <span class="product-item-badge">${product.payment_method}</span>
+            `;
             container.appendChild(div);
           });
         })
-        .catch(err => {
-          alert.innerHTML = `<h5>Could not load order details.</h5>`
-          alert.style.color = 'red';
-        });
+        .catch(err => showMsg(err.message || "Could not load order details.", "error"));
     });
   </script>
-
 </body>
-
 </html>

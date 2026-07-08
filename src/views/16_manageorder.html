@@ -1,405 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Cartinix | Manage Orders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.16);
+      --gold: #c9a96e;
+      --gold-l: #e2c99a;
+      --text: #ede9e0;
+      --muted: #7a7268;
+      --subtle: #3f3b35;
+      --danger: #e05555;
+      --success: #4caf7d;
+      --info: #7ea1e0;
+      --warn: #e0b355;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #ffffff;
-      color: #111827;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    .dashboard-header {
-      background: #ffffff;
-      color: #111827;
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 600;
-      height: 60px;
-      border-bottom: 1px solid #e5e7eb;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    /* ── HEADER ── */
+    .dash-header {
+      height: 66px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.5rem, 4vw, 2.5rem);
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .dash-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .dash-brand img {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--gold);
+    }
+    .dash-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.05em;
+    }
+    .dash-brand-tag {
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); margin-left: 8px;
+      padding: 3px 10px; border: 1px solid var(--border-h); border-radius: 20px;
+    }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .admin-email { font-size: 0.78rem; color: var(--muted); display: none; }
+    .nav-btn-outline {
+      background: transparent; border: 1px solid var(--border-h); color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 8px 16px; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .nav-btn-outline:hover { color: var(--text); border-color: var(--muted); }
+    .sidebar-toggler {
+      display: none; background: none;
+      border: 1px solid var(--border); color: var(--text);
+      padding: 6px 10px; border-radius: 6px; cursor: pointer;
     }
 
-    .logo {
-      height: 70px;
-    }
-
-    .dashboard-header .brand {
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: #0f172a;
-    }
-
-    .dashboard-header .header-actions button {
-      background: white;
-      color: black;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .dashboard-header .header-actions button:hover {
-      background: black;
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    .dashboard {
-      display: flex;
-      height: calc(100vh - 60px);
-    }
+    /* ── LAYOUT ── */
+    .dashboard { display: flex; min-height: calc(100vh - 66px); }
 
     .sidebar {
-      width: 260px;
-      background: #ffffff;
-      color: #374151;
-      padding-top: 25px;
-      flex-shrink: 0;
-      border-right: 1px solid #e5e7eb;
+      width: 240px; flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 14px;
     }
-
     .sidebar a {
-      display: block;
-      color: #374151;
-      padding: 14px 20px;
-      margin: 6px 16px;
-      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      color: var(--muted); text-decoration: none;
+      padding: 11px 16px; margin-bottom: 4px;
       border-radius: 8px;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
+      font-size: 0.85rem; font-weight: 400;
+      transition: all 0.2s;
     }
-
-    .sidebar a:hover {
-      background: #f3f4f6;
-      color: #111827;
-    }
-
+    .sidebar a i { width: 16px; text-align: center; font-size: 0.85rem; }
+    .sidebar a:hover { background: var(--surface2); color: var(--text); }
     .sidebar a.active {
-      background: #2563eb;
-      color: white;
+      background: rgba(201,169,110,0.1);
+      color: var(--gold);
+      border: 1px solid rgba(201,169,110,0.25);
     }
 
-    .main-content {
-      flex-grow: 1;
-      padding: 30px;
-      background: #ffffff;
-      overflow-y: auto;
+    .main-content { flex: 1; padding: 40px clamp(1.5rem, 4vw, 3rem); }
+
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+    }
+    .page-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--gold); opacity: 0.5; }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700; color: var(--text);
+      margin-bottom: 8px;
+    }
+    .page-sub {
+      font-size: 0.84rem; color: var(--muted); font-weight: 300;
+      margin-bottom: 32px;
     }
 
-    .main-content h4 {
-      font-weight: 700;
-      color: #111827;
-      font-size: 1.8rem;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .product-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .product-row {
-      display: flex;
-      align-items: flex-start;
-      background: #f9fafb;
-      padding: 20px;
+    /* ── ORDER CARDS (clickable) ── */
+    .order-list { display: flex; flex-direction: column; gap: 16px; }
+    .order-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      width: 100%;
-      gap: 20px;
-      flex-wrap: wrap;
-      border: 1px solid #e5e7eb;
-      transition: all 0.3s ease;
-    }
-
-    .product-row:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-      border-color: #111827;
-    }
-
-    .product-row img {
-      height: 80px;
-      width: 80px;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-    }
-
-    .product-details {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .product-details h6 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #111827;
-    }
-
-    .product-details p {
-      margin: 4px 0;
-      font-size: 0.95rem;
-      font-weight: 400;
-      color: #374151;
-    }
-
-    .product-details label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #111827;
-      margin-top: 8px;
-      margin-bottom: 6px;
-    }
-
-    .product-details input {
-      width: 120px;
-      padding: 8px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      margin-right: 10px;
-      background: #ffffff;
-      color: #111827;
-      transition: all 0.3s ease;
-    }
-
-    .product-details input:focus {
-      outline: none;
-      border-color: #111827;
-    }
-
-    .product-details button {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
+      padding: 22px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      margin-right: 8px;
+      transition: all 0.25s;
+    }
+    .order-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+    .order-head {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+      margin-bottom: 8px;
+    }
+    .order-id {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 700; color: var(--text);
+    }
+    .status-pill {
+      font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 20px;
+      border: 1px solid var(--border-h);
+    }
+    .status-pill.pending   { color: var(--warn); border-color: rgba(224,179,85,0.35); background: rgba(224,179,85,0.08); }
+    .status-pill.shipped   { color: var(--info); border-color: rgba(126,161,224,0.35); background: rgba(126,161,224,0.08); }
+    .status-pill.other     { color: var(--muted); }
+
+    .order-summary {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      font-size: 0.8rem; color: var(--muted);
+      padding-bottom: 14px; margin-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .order-summary strong { color: var(--text); font-weight: 500; }
+
+    .order-item { display: flex; align-items: center; gap: 14px; padding: 8px 0; }
+    .order-item img {
+      width: 52px; height: 52px; object-fit: cover; border-radius: 8px;
+      border: 1px solid var(--border-h); flex-shrink: 0;
+    }
+    .order-item-title { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+    .order-item-meta { font-size: 0.78rem; color: var(--muted); }
+    .more-items { font-size: 0.78rem; color: var(--subtle); padding: 6px 0 0 66px; }
+
+    .view-hint {
+      font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--gold); margin-top: 14px;
+      display: flex; align-items: center; gap: 6px;
     }
 
-    .product-details button#edit {
-      background: #2563eb;
-      color: white;
+    /* ── FILTER TABS ── */
+    .status-filter { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .filter-btn {
+      background: var(--surface); border: 1px solid var(--border-h); color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 8px 16px; border-radius: 20px;
+      cursor: pointer; transition: all 0.2s;
     }
+    .filter-btn:hover { color: var(--text); border-color: var(--muted); }
+    .filter-btn.active { background: var(--gold); color: #080808; border-color: var(--gold); }
 
-    .product-details button#edit:hover {
-      background: #1d4ed8;
+    /* ── SKELETON / EMPTY / ERROR ── */
+    .skeleton-order { height: 160px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
+    .state-block {
+      text-align: center; padding: 60px 2rem;
+      border: 1px dashed var(--border-h); border-radius: 12px;
     }
-
-    .product-details button#save {
-      background: #16a34a;
-      color: white;
+    .state-icon {
+      width: 48px; height: 48px; margin: 0 auto 16px;
+      border: 1px solid rgba(201,169,110,0.25); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 1.1rem;
     }
-
-    .product-details button#save:hover {
-      background: #15803d;
+    .state-block.error .state-icon { color: var(--danger); border-color: rgba(224,85,85,0.3); }
+    .state-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 700; color: var(--text); margin-bottom: 6px;
     }
+    .state-desc { font-size: 0.83rem; color: var(--muted); font-weight: 300; }
 
-    .product-details button#delete {
-      background: #dc2626;
-      color: white;
-    }
-
-    .product-details button#delete:hover {
-      background: #b91c1c;
-    }
-
-    .product-details input,
-    .product-details button {
-      margin-top: 6px;
-    }
-
-    .product-details .form-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    /* Scrollbar */
-    .main-content::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .main-content::-webkit-scrollbar-track {
-      background: #f9fafb;
-    }
-
-    .main-content::-webkit-scrollbar-thumb {
-      background: #d1d5db;
-      border-radius: 4px;
-    }
-
-    .main-content::-webkit-scrollbar-thumb:hover {
-      background: #9ca3af;
-    }
-
-    @media (max-width: 768px) {
-      .dashboard {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        width: 100%;
-        height: auto;
-      }
-
-      .product-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .product-row img {
-        margin-bottom: 10px;
-      }
-
-      .product-details .form-actions {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .product-details input {
-        width: 100%;
-      }
-
-      .main-content h4 {
-        font-size: 1.5rem;
-      }
+    @media (max-width: 900px) {
+      .sidebar { position: fixed; top: 66px; left: 0; bottom: 0; z-index: 150; transform: translateX(-100%); transition: transform 0.25s; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-toggler { display: flex; }
+      .main-content { padding: 28px 1.25rem; }
     }
   </style>
-
 </head>
-
 <body>
 
-  <div class="dashboard-header">
-    <a class="navbar-brand d-flex align-items-center" href="2_homepage.html">
-      <img class="logo" src="http://localhost:8000/photos/logo.jpg" alt="Cartinix Logo" class="logo-img me-2 " />
-      <span class="text-white fw-bold">Cartinix</span>
+  <div class="dash-header">
+    <a class="dash-brand" href="2_homepage.html">
+      <img src="http://localhost:8000/photos/logo.jpg" alt="Cartinix" />
+      <span class="dash-brand-name">Cartinix</span>
+      <span class="dash-brand-tag">Admin</span>
     </a>
-    <div class="header-actions">
-      <button id="logout">Logout</button>
+    <div class="header-right">
+      <span class="admin-email" id="adminEmailLabel"></span>
+      <button class="sidebar-toggler" id="sidebarToggler" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+      <button class="nav-btn-outline" id="logout">Logout</button>
     </div>
   </div>
 
   <div class="dashboard">
 
-    <div class="sidebar">
-      <a href="11_admin.html">Dashboard</a>
-      <a href="13_manageproduct.html">Manage Products</a>
-      <a href="12_addproduct.html">Add Product</a>
-      <a href="15_showorders.html">Check Orders</a>
-      <a href="16_manageorder.html">Manage Orders</a>
-      <a href="19_myincome.html">My Income</a>
+    <div class="sidebar" id="sidebar">
+      <a href="11_admin.html"><i class="fas fa-gauge"></i> Dashboard</a>
+      <a href="13_manageproduct.html"><i class="fas fa-boxes-stacked"></i> Manage Products</a>
+      <a href="12_addproduct.html"><i class="fas fa-circle-plus"></i> Add Product</a>
+      <a href="15_showorders.html"><i class="fas fa-receipt"></i> Check Orders</a>
+      <a href="16_manageorder.html" class="active"><i class="fas fa-truck-fast"></i> Manage Orders</a>
+      <a href="19_myincome.html"><i class="fas fa-sack-dollar"></i> My Income</a>
     </div>
 
     <div class="main-content">
-      <h4>Orders on the Store</h4>
-      <div class="product-list" id="order-container">
+      <div class="page-eyebrow">Orders</div>
+      <div class="page-title">Manage Orders</div>
+      <div class="page-sub">Orders still in progress — pending and shipped. Delivered orders are done and won't show here.</div>
 
+      <div class="status-filter" id="statusFilter" style="display:none;">
+        <button class="filter-btn active" data-status="all">All</button>
+        <button class="filter-btn" data-status="pending">Pending</button>
+        <button class="filter-btn" data-status="shipped">Shipped</button>
       </div>
-      <div id="responseMessage" class="text-center mb-3 fw-semibold"></div>
+
+      <div class="order-list" id="orderList">
+        <div class="skeleton-order"></div>
+        <div class="skeleton-order"></div>
+      </div>
     </div>
 
   </div>
+
   <script>
-    const content = document.querySelector(".product-list");
-    const alert = document.getElementById("responseMessage");
-    fetch(`http://localhost:8000/admin/getorder`)
-      .then(async res => {
-        if (!res.ok) {
-          const text = await res.json();
-          alert.innerHTML = `<h5>${text.Error}</h5>`;
-          alert.style.color = 'red'
-        }
-        return res.json();
-      })
-      .then(data => {
-        data.forEach(order => {
-          if (order.status !== "delivered") {
-            const listing = document.createElement("div");
-            listing.classList.add("product-row");
+    // ── Admin auth guard ──
+    const adminEmail = localStorage.getItem("adminEmail");
+    if (!adminEmail) {
+      window.location.href = "1_Signin.html";
+    } else {
+      const label = document.getElementById("adminEmailLabel");
+      label.textContent = adminEmail;
+      label.style.display = "inline";
+    }
 
-            let itemsHTML = "";
-            order.items.forEach(item => {
-              itemsHTML += `
-          <div class="d-flex align-items-center mb-2" style="gap:10px;">
-            <img src="http://localhost:8000/photos/${item.image_path}" 
-                 alt="${item.title}" 
-                 style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">
-            <div>
-              <p class="mb-1"><strong>${item.title}</strong></p>
-              <p class="mb-0">Qty: ${item.quantity} | Rs. ${item.price}</p>
-            </div>
-          </div>
-        `;
-            });
+    // Bind logout immediately, independent of the orders fetch outcome —
+    // previously it was only wired up after a successful load.
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("adminEmail");
+      window.location.href = "2_homepage.html";
+    });
 
-            const totalAmount = order.items.reduce(
-              (sum, item) => sum + item.price * item.quantity,
-              0
-            );
+    document.getElementById("sidebarToggler").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("open");
+    });
 
-            listing.innerHTML = `
-        <div class="product-details">
-          <h6>Order ID: ${order.order_id}</h6>
-          <p>
-  <strong>Status:</strong> 
-  <span class="badge ${order.status === 'pending' ? 'bg-warning text-dark' : order.status === 'shipped' ? 'bg-primary' : order.status === 'delivered' ? 'bg-success' : 'bg-secondary'}">
-    ${order.status || 'Pending'}
-  </span>
-</p>
-          <p><strong>Total Items:</strong> ${order.items.length}</p>
-          <p><strong>Total Amount:</strong> Rs. ${totalAmount}</p>
-          <hr/>
-          <div>${itemsHTML}</div>
+    function escapeHtml(str) {
+      return String(str ?? "").replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[c]));
+    }
+
+    const orderList = document.getElementById("orderList");
+    const statusFilter = document.getElementById("statusFilter");
+
+    function renderState({ icon, title, desc, error = false }) {
+      orderList.innerHTML = `
+        <div class="state-block ${error ? "error" : ""}">
+          <div class="state-icon"><i class="fas ${icon}"></i></div>
+          <div class="state-title">${title}</div>
+          <div class="state-desc">${desc}</div>
         </div>
       `;
+    }
 
-            listing.addEventListener("click", () => {
-              localStorage.setItem("seletedorderid", order.order_id);
-              window.location.href = "17_order-details.html";
-            });
+    function statusClass(status) {
+      const s = (status || "pending").toLowerCase();
+      return ["pending", "shipped"].includes(s) ? s : "other";
+    }
 
-            content.appendChild(listing);
-          }
+    function renderOrders(orders) {
+      if (!orders.length) {
+        renderState({
+          icon: "fa-circle-check",
+          title: "Nothing to manage right now",
+          desc: "All orders are delivered, or there are none for this filter."
         });
-      })
+        return;
+      }
 
+      orderList.innerHTML = "";
+      orders.forEach(order => {
+        const items = order.items || [];
+        const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const previewItems = items.slice(0, 2);
+        const remaining = items.length - previewItems.length;
+
+        const itemsHTML = previewItems.map(item => `
+          <div class="order-item">
+            <img src="http://localhost:8000/photos/${item.image_path}" alt="${escapeHtml(item.title)}" loading="lazy" />
+            <div>
+              <div class="order-item-title">${escapeHtml(item.title)}</div>
+              <div class="order-item-meta">Qty ${item.quantity} &middot; Rs ${Number(item.price).toLocaleString()}</div>
+            </div>
+          </div>
+        `).join("");
+
+        const card = document.createElement("div");
+        card.className = "order-card";
+        card.innerHTML = `
+          <div class="order-head">
+            <div class="order-id">Order #${escapeHtml(order.order_id)}</div>
+            <div class="status-pill ${statusClass(order.status)}">${escapeHtml(order.status || "Pending")}</div>
+          </div>
+          <div class="order-summary">
+            <span><strong>${items.length}</strong> item${items.length === 1 ? "" : "s"}</span>
+            <span><strong>Rs ${totalAmount.toLocaleString()}</strong> total</span>
+          </div>
+          ${itemsHTML}
+          ${remaining > 0 ? `<div class="more-items">+ ${remaining} more item${remaining === 1 ? "" : "s"}</div>` : ""}
+          <div class="view-hint">View & manage <i class="fas fa-arrow-right"></i></div>
+        `;
+
+        card.addEventListener("click", () => {
+          // NOTE: kept the existing "seletedorderid" key (typo and all) so
+          // 17_order-details.html — which likely reads this exact key —
+          // keeps working. Worth renaming to "selectedOrderId" everywhere
+          // together in one pass if you'd like.
+          localStorage.setItem("seletedorderid", order.order_id);
+          window.location.href = "17_order-details.html";
+        });
+
+        orderList.appendChild(card);
+      });
+    }
+
+    // Only pending/shipped orders ever live here — delivered orders are
+    // excluded up front and never enter the filterable pool.
+    let inProgressOrders = [];
+
+    fetch("http://localhost:8000/admin/getorder")
+      .then(async res => {
+        // Read the body exactly once, whether the request succeeded or not
+        // (the previous version could call res.json() twice on error, which
+        // throws "body stream already read").
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.Error || data.err || "Failed to load orders.");
+        return data;
+      })
+      .then(data => {
+        inProgressOrders = (Array.isArray(data) ? data : []).filter(o => o.status !== "delivered");
+
+        if (inProgressOrders.length) statusFilter.style.display = "flex";
+        renderOrders(inProgressOrders);
+      })
       .catch(err => {
-        alert.innerHTML = `<h5>${err.message}</h5>`;
-        alert.style.color = 'red'
-      })
-    document.getElementById("logout").addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("adminEmail");
-      window.location.href = '2_homepage.html';
-    })
+        renderState({
+          icon: "fa-triangle-exclamation",
+          title: "Something went wrong",
+          desc: err.message || "Please try again in a moment.",
+          error: true
+        });
+      });
 
+    statusFilter.addEventListener("click", (e) => {
+      const btn = e.target.closest(".filter-btn");
+      if (!btn) return;
 
+      statusFilter.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const status = btn.dataset.status;
+      const filtered = status === "all"
+        ? inProgressOrders
+        : inProgressOrders.filter(o => (o.status || "pending").toLowerCase() === status);
+      renderOrders(filtered);
+    });
   </script>
-</body>
 
+</body>
 </html>
