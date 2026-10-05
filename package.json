@@ -1,17 +1,18 @@
 {
   "name": "cartinix-website",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "Full-stack eCommerce web application built with Node.js, Express.js, PostgreSQL, and JavaScript.",
+  "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/app.js"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Mashood-Zah1d/Cartinix-Website.git"
   },
-  "author": "",
+  "author": "Mashood Zahid",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Mashood-Zah1d/Cartinix-Website/issues"
@@ -24,7 +25,6 @@
     "express": "^5.2.1",
     "multer": "^2.1.1",
     "nodemailer": "^7.0.13",
-    "path": "^0.12.7",
     "pg": "^8.21.0"
   },
   "devDependencies": {
